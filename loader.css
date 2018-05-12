@@ -1,0 +1,16 @@
+.loader-container {
+	width: 200px;
+	height: 20px;
+	border: 1px solid #000;
+}
+
+.loader-content {
+	height: 100%;
+	background-color: lime;
+	width: 0%;
+}
+
+.loader-wrapper {
+	position: absolute;
+	color: #fff;
+}

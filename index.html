@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Isoge</title>
+	<script src="./lib/pixi.min.js"></script>
+	<script src="./lib/pixi-sound.js"></script>
+	<script src="./lib/pixi-display.js"></script>
+	<link rel="stylesheet" href="loader.css">
+	<style>
+		body, html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+		}
+		body {
+			background-color: #111;
+		}
+		#wrapper canvas {
+			width: 100vw;
+			height: 70vw;
+		}
+	</style>
+</head>
+<body>
+	<div id="wrapper">
+		
+		<div class="loader-wrapper">
+			<div id="loaderInfo"></div>
+			<div class="loader-container">
+				<div id="loaderBar" class="loader-content"></div>
+			</div>
+			<button onclick="resetView()">Reset View</button>
+			<button onclick="setTool('tile')">Place tile</button>
+		</div>
+
+	</div>
+	<script src="./app.js" type="module"></script>
+
+</body>
+</html>

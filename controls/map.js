@@ -1,5 +1,8 @@
-import {scene} from '../setup.js'
-let mouseDown = false;
+import {offsetX, offsetY, scene} from '../setup.js'
+import * as tools from './tools.js'
+
+import {testLevel} from '../levels/testLevel.js'
+export let mouseDown = false;
 export function init() {
 	window.resetView = () => {
 		scene.position.x = 0;
@@ -15,9 +18,11 @@ export function init() {
 	})
 
 	window.addEventListener('mousemove', function(e) {
-		if (mouseDown == true) {
+		if (mouseDown == true && tools.currentTool.value == 'move') {
 			scene.position.x += Math.round(e.movementX / 2)
 			scene.position.y += Math.round(e.movementY / 2)
+			testLevel.updateCulling()
+			// console.log(scene.position.x / 16 + 16, scene.position.y / 32 + 1)
 		}
 	})
 	window.addEventListener('wheel', function(e) {

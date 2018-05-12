@@ -1,5 +1,6 @@
 import {app} from '../app.js'
 import * as C from '../constants.js'
+import * as tools from '../controls/tools.js'
 export function init() {
 	let uiContainer = new PIXI.Container();
 	uiContainer.position.y = C.CANVAS_SIZEY - 64;
@@ -34,6 +35,9 @@ export function init() {
 			button.setTexture(theseButtonsActive[index])
 		})
 	})
+	move.on('mousedown', (e) => {tools.setTool('move')})
+	build.on('mousedown', (e) => {tools.setTool('build')})
+	destroy.on('mousedown', (e) => {tools.setTool('destroy')})
 	theseButtons[0].setTexture(theseButtonsActive[0])
 	uiContainer.addChild(move);
 	uiContainer.addChild(build);

@@ -33,7 +33,14 @@ export function load() {
   .add("edge-wall-y", "assets/edge-wall-y.png")
   .add("edge-wall-x-inner", "assets/edge-wall-x-inner.png")
   .add("edge-wall-y-inner", "assets/edge-wall-y-inner.png")
+
   .add("glow-white", "assets/glow-white.png")
+  .add("glow-white-west", "assets/glow-white-west.png")
+  .add("glow-white-northWest", "assets/glow-white-northWest.png")
+  .add("glow-white-east", "assets/glow-white-east.png")
+  .add("glow-white-northEast", "assets/glow-white-northEast.png")
+  .add("glow-white-southEast", "assets/glow-white-southEast.png")
+  .add("glow-white-fill", "assets/glow-white-fill.png")
 
   .on("progress", loadProgressHandler)
   .load(setup)

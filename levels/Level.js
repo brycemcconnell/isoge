@@ -1,4 +1,4 @@
-import Tile from '../entities/Tile.js'
+import {Tile} from '../entities/Tile.js'
 import Room from '../entities/Room.js'
 import * as C from '../constants.js'
 export default class Level {
@@ -61,6 +61,7 @@ export default class Level {
 			]
 		});
 		testRoom2.render();
+		this.updateCulling();
 	}
 
 	getTile(x, y) {

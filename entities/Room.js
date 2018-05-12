@@ -1,4 +1,4 @@
-import Tile from './Tile.js'
+import {Tile} from './Tile.js'
 import * as tools from '../controls/tools.js'
 import {testLevel} from '../levels/testLevel.js'
 export default class Room {

@@ -3,6 +3,7 @@ import {testLevel} from './levels/testLevel.js'
 import * as testUI from './ui/testUI.js'
 import * as layers from './layers.js'
 import * as buildUI from './ui/build.js'
+import * as glow from './entities/glow.js' 
 
 
 export let offsetX = 32 * 7;
@@ -10,7 +11,6 @@ export let offsetY = 0;
 
 
 export let scene;
-export let glow;
 export default function setup() {
 
 	app.stage = new PIXI.display.Stage();
@@ -20,11 +20,10 @@ export default function setup() {
 	testUI.init();
 	buildUI.init();
 	layers.init();
+	glow.initGlowTextures()
 
-	glow = new PIXI.Sprite(PIXI.loader.resources["glow-white"].texture);
-	scene.addChild(glow);
+	
 	testLevel.init();
-	glow.parentGroup = layers.select
 
 	let axisX = new PIXI.Text('X Axis >', {fill: 0xffffff})
 	axisX.rotation = .6

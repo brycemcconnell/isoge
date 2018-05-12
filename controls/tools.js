@@ -2,7 +2,9 @@ import * as buildUI from '../ui/build.js'
 
 export const currentTool = {
 	value: 'move',
-	tile: 'floor-wood'
+	tile: 'floor-wood',
+	/* @mode - String - [area][line][single]*/
+	mode: 'area'
 }
 
 export function setTool(tool) {

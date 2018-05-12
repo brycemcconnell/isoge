@@ -7,6 +7,7 @@ export function init() {
 	window.resetView = () => {
 		scene.position.x = 0;
 		scene.position.y = 0;
+		testLevel.updateCulling()
 	}
 
 	window.addEventListener('mousedown', function(e) {

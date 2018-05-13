@@ -1,5 +1,4 @@
 import {Tile} from '../entities/Tile.js'
-import Room from '../entities/Room.js'
 import * as C from '../constants.js'
 export default class Level {
 	constructor(config) {
@@ -25,42 +24,6 @@ export default class Level {
 				this.tiles[i].push(testTile)
 			})
 		})
-		// for (let obj in this.custom) {
-		// 	new Tile(this.custom[obj])
-		// }
-		let testRoom = new Room({
-			x1: 8,
-			y1: 8,
-			x2: 13,
-			y2: 13,
-			door: [
-				{
-					x: 12,
-					y: 11,
-					fill: [2, 3]
-				}
-			]
-		});
-		testRoom.render();
-		let testRoom2 = new Room({
-			x1: 13,
-			y1: 10,
-			x2: 17,
-			y2: 16,
-			door: [
-				{
-					x: 13,
-					y: 11,
-					fill: [0, 1]
-				},
-				{
-					x: 16,
-					y: 14,
-					fill: [2, 3]
-				}
-			]
-		});
-		testRoom2.render();
 		this.updateCulling();
 	}
 

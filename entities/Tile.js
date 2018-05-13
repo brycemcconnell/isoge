@@ -19,18 +19,10 @@ export class Tile {
 
 		this.tile = Array.isArray(config.tile) ? config.tile[random(config.tile.length - 1)] : config.tile;
 		this.defaultTexture = new PIXI.Texture(PIXI.loader.resources[this.tile].texture);
-		/* @walls - 
-				[1]
-			  [2] [3]
-			   	[4]
-		*/
 		
 		this.renderTile = new PIXI.Sprite(this.defaultTexture);
 		this.renderTile.scale.set(1, 1);
 		this.renderTile.visible = config.visible || false;
-		this.walls = config.walls || [];
-		this.wallContainer = new PIXI.Container();
-		this.renderTile.addChild(this.wallContainer);
 
 		this.glow = new PIXI.Sprite(PIXI.loader.resources['glow-white'].texture);
 		this.renderTile.addChild(this.glow);
@@ -110,78 +102,22 @@ export class Tile {
 		});
 		this.renderTile.on('mouseup', () => {
 			if (tools.currentTool.value == 'build' || tools.currentTool.value == 'destroy') {
-				if (tools.currentTool.type == 'tile') {
-					testLevel.tiles.forEach(row => {
-						row.forEach(tile => {
-							if (tile.glow.visible) {
-								if (tools.currentTool.value == 'build') {
-									handleBuild(tile);
-								}
-								if (tools.currentTool.value == 'destroy') {
-									handleDestroy(tile);
-								}
+				testLevel.tiles.forEach(row => {
+					row.forEach(tile => {
+						if (tile.glow.visible) {
+							if (tools.currentTool.value == 'build') {
+								handleBuild(tile);
 							}
-							tile.glow.visible = false;
-							tile.glow.setTexture(glow.glowDefault);
-							tile.glow.tint = 0xffffff;
-
-						});
-					});
-				}
-				if (tools.currentTool.type == 'wall') {
-					testLevel.tiles.forEach(row => {
-						row.forEach(tile => {
-							if (tile.glow.visible) {
-								console.log('a')
-								if (tools.currentTool.value == 'build') {
-									tile.setWalls(["wall-x","wall-x"])
-									tile.buildWalls();
-								}
-								if (tools.currentTool.value == 'destroy') {
-									tile.setWalls([null, null, null, null])
-								}
+							if (tools.currentTool.value == 'destroy') {
+								handleDestroy(tile);
 							}
-							tile.glow.visible = false;
-							tile.glow.setTexture(glow.glowDefault);
-							tile.glow.tint = 0xffffff;
-						});
+						}
+						tile.glow.visible = false;
+						tile.glow.setTexture(glow.glowDefault);
+						tile.glow.tint = 0xffffff;
+
 					});
-				}
-			}
-		});
-		this.buildWalls();
-	}
-
-	setWalls(newWalls) {
-		this.wallContainer.children.forEach(child => {
-			child.destroy();
-		});
-		this.wallContainer.children = []
-		this.walls = newWalls;
-	}
-
-	buildWalls() {
-		this.walls.forEach((wall,index) => {
-			if (wall) {
-				let thisIsoX = 16;
-				let thisIsoY = -32;
-				let alpha = 1;
-				let layer = layers.wall;
-				if (index == 1) { thisIsoX -= 16; thisIsoY += 8;}
-				if (index == 2) { thisIsoY += 8; thisIsoX += 16; }
-				if (index == 3) { thisIsoY += 16; }
-				let renderWall = new PIXI.Sprite(PIXI.loader.resources[wall].texture);
-				renderWall.scale.set(1, 1);
-				renderWall.position.set(thisIsoX, thisIsoY);
-				renderWall.alpha = alpha;
-				renderWall.parentGroup = layer;
-				this.wallContainer.addChild(renderWall);
-				renderWall.hitArea = new PIXI.Polygon([
-					0,  72,
-					16, 66,
-					32, 72,
-					16, 80
-				]);
+				});
 			}
 		});
 	}

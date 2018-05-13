@@ -33,7 +33,6 @@ export const testLevel = new Level({
 			"floor-grass-dirt2",
 			"floor-grass-dirt3"
 		],
-		"elevated-floor-wood",
 		"floor-grass",
 		"floor-grass"
 	],

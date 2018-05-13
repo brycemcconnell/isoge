@@ -10,12 +10,13 @@ import Plant from '../entities/Plant.js'
 
 let lastClicked;
 
-
+let glowTiles = [];
 export class Tile {
 	constructor(config) {
 		this.scene = scene;
 		this.x = config.x * 32 || 0;
 		this.y = config.y * 32 || 0;
+		this.playerTile = false;
 
 		this.tile = Array.isArray(config.tile) ? config.tile[C.random(config.tile.length - 1)] : config.tile;
 		this.defaultTexture = new PIXI.Texture(PIXI.loader.resources[this.tile].texture);
@@ -46,6 +47,7 @@ export class Tile {
 			this.glow.visible = true;
 			if (mouseDown) {
 				if (tools.currentTool.value !== 'move') {
+					glowTiles = [];
 					testLevel.tiles.forEach(row => {
 						row.forEach(tile => tile.glow.visible = false);
 					});
@@ -76,6 +78,7 @@ export class Tile {
 							tilesToUpdate.push(loopTile);
 						}
 					}
+					let thereWasCollision = false;
 					tilesToUpdate.forEach(loopTile => {
 						loopTile.glow.setTexture(glow.glowFill);
 						if (tools.currentTool.value == 'destroy') {
@@ -86,7 +89,16 @@ export class Tile {
 							loopTile.glow.tint = 0xffffff;
 						}
 						loopTile.glow.visible = true;
+						if (!isTileClear(loopTile)) {
+							thereWasCollision = true
+						}
+						glowTiles.push(loopTile)
 					});
+					if (thereWasCollision &&
+						(tools.currentTool.value == 'build' ||
+						tools.currentTool.value == 'plow')) {
+						glowTiles.forEach(tile => tile.glow.tint = 0xff0000);
+					}
 				}
 			}
 		});
@@ -99,38 +111,14 @@ export class Tile {
 		});
 		this.renderTile.on('click', () => {
 			testLevel.getTile(this.x / 32, this.y / 32);
+			glowTiles = [this];
+			handleTileActivation();
 		});
 		this.renderTile.on('mouseup', () => {
-			if (tools.currentTool.value !== 'move') {
-				testLevel.tiles.forEach(row => {
-					row.forEach(tile => {
-						if (tile.glow.visible) {
-							if (tools.currentTool.value == 'build') {
-								handleBuild(tile);
-							}
-							if (tools.currentTool.value == 'destroy') {
-								handleDestroy(tile);
-							}
-							if (tools.currentTool.value == 'seed') {
-								handleSeed(tile);
-							}
-							if (tools.currentTool.value == 'harvest') {
-								handleHarvest(tile);
-							}
-							if (tools.currentTool.value == 'plow') {
-								handlePlow(tile);
-							}
-						}
-						tile.glow.visible = false;
-						tile.glow.setTexture(glow.glowDefault);
-						tile.glow.tint = 0xffffff;
-
-					});
-				});
-			}
+			handleTileActivation();
 		});
 		this.plowed = false;
-		this.seeded = false;
+		this.seeded = config.plant ? true : false;
 		this.plant = new Plant(this, config.plant);
 	}
 
@@ -145,7 +133,7 @@ function handleBuild(tile) {
 		tile.seeded = false;
 		tile.plant.reset();
 	}
-
+	tile.playerTile = true;
 	let newTile = new PIXI.Texture(PIXI.loader.resources[tools.currentTool.tile].texture);
 	tile.renderTile.setTexture(newTile);
 }
@@ -153,6 +141,7 @@ function handleBuild(tile) {
 function handleDestroy(tile) {
 	tile.plowed = false;
 	tile.seeded = false;
+	tile.playerTile = false;
 	tile.plant.reset();
 	tile.renderTile.setTexture(tile.defaultTexture);
 }
@@ -170,4 +159,53 @@ function handlePlow(tile) {
 	tile.setPlowed(true)
 	let newTile = new PIXI.Texture(PIXI.loader.resources[tools.currentTool.tile].texture);
 	tile.renderTile.setTexture(newTile);
+}
+
+function allTilesClear(glowTiles) {
+	let result = true;
+	glowTiles.some(tile => {
+		if (tile.plowed || tile.seeded || tile.playerTile) {
+			result = false;
+			return true;
+		}
+	});
+	return result;
+}
+
+function isTileClear(tile) {
+	if (tile.plowed || tile.seeded || tile.playerTile) {
+		return false;
+	}
+	return true;
+}
+
+function handleTileActivation() {
+	if (tools.currentTool.value !== 'move' && allTilesClear(glowTiles)) {
+		glowTiles.forEach(tile => {
+			if (tools.currentTool.value == 'build') {
+				handleBuild(tile);
+			}
+			if (tools.currentTool.value == 'plow') {
+				handlePlow(tile);
+			}
+			tile.glow.visible = false;
+			tile.glow.setTexture(glow.glowDefault);
+			tile.glow.tint = 0xffffff;
+		});
+	}
+	glowTiles.forEach(tile => {
+		if (tools.currentTool.value == 'destroy') {
+			handleDestroy(tile);
+		}
+		if (tools.currentTool.value == 'seed') {
+			handleSeed(tile);
+		}
+		if (tools.currentTool.value == 'harvest') {
+			handleHarvest(tile);
+		}
+		tile.glow.visible = false;
+		tile.glow.setTexture(glow.glowDefault);
+		tile.glow.tint = 0xffffff;
+	});
+	glowTiles = [];
 }

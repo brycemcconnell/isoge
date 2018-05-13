@@ -3,13 +3,10 @@ export function load() {
   PIXI.loader
 
   .add("ui-move", "assets/ui-move.png")
-  .add("ui-move-down", "assets/ui-move-down.png")
   .add("ui-move-active", "assets/ui-move-active.png")
   .add("ui-build", "assets/ui-build.png")
-  .add("ui-build-down", "assets/ui-build-down.png")
   .add("ui-build-active", "assets/ui-build-active.png")
   .add("ui-destroy", "assets/ui-destroy.png")
-  .add("ui-destroy-down", "assets/ui-destroy-down.png")
   .add("ui-destroy-active", "assets/ui-destroy-active.png")
 
   .add("ui-btn-up", "assets/ui-btn-up.png")
@@ -35,11 +32,6 @@ export function load() {
   .add("edge-wall-y-inner", "assets/edge-wall-y-inner.png")
 
   .add("glow-white", "assets/glow-white.png")
-  .add("glow-white-west", "assets/glow-white-west.png")
-  .add("glow-white-northWest", "assets/glow-white-northWest.png")
-  .add("glow-white-east", "assets/glow-white-east.png")
-  .add("glow-white-northEast", "assets/glow-white-northEast.png")
-  .add("glow-white-southEast", "assets/glow-white-southEast.png")
   .add("glow-white-fill", "assets/glow-white-fill.png")
 
   .on("progress", loadProgressHandler)

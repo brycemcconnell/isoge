@@ -1,3 +1,9 @@
+/*
+	@IMPORTANT
+	Refactor these buttons to use the Button class instead
+	Add event listeners for each button as 'hotkey', perhaps somewhere to also set these hotkeys
+
+*/
 import {app} from '../app.js'
 import * as C from '../constants.js'
 import * as tools from '../controls/tools.js'
@@ -43,5 +49,17 @@ export function init() {
 	uiContainer.addChild(build);
 	uiContainer.addChild(destroy);
 	app.stage.addChild(uiContainer);
+
+	window.addEventListener('keypress', (e) => {
+		if (e.key == 1) {
+			tools.setTool('move')
+		}
+		if (e.key == 2) {
+			tools.setTool('build')
+		}
+		if (e.key == 3) {
+			tools.setTool('destroy')
+		}
+	})
 
 }

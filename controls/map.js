@@ -18,6 +18,8 @@ export function init() {
 		mouseDown = false;
 	})
 
+	
+
 	window.addEventListener('mousemove', function(e) {
 		if (mouseDown == true && tools.currentTool.value == 'move') {
 			scene.position.x += Math.round(e.movementX / 2)

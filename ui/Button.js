@@ -1,16 +1,15 @@
 import * as layers from '../layers.js'
+
 export default class Button {
 	constructor(config) {
-		this.upTextureResource = config.upTexture ||"ui-btn-up"
-		this.upTexture = new PIXI.Texture(PIXI.loader.resources[this.upTextureResource].texture);
-		this.downTextureResource = config.downTexture ||"ui-btn-down"
-		this.downTexture = new PIXI.Texture(PIXI.loader.resources[this.downTextureResource].texture);
+		this.upTexture = new PIXI.Texture(PIXI.loader.resources[config.upTexture || "ui-btn-up"].texture);
+		this.downTexture = new PIXI.Texture(PIXI.loader.resources[config.downTexture || "ui-btn-down"].texture);
 
 		this.button = new PIXI.Sprite(this.upTexture)
 		this.button.parentGroup = layers.ui
 		// console.log(config.)
-		this.iconTextureResource = config.iconTexture || "ui-icon-default"
-		this.iconTexture = new PIXI.Texture(PIXI.loader.resources[this.iconTextureResource].texture);
+		this.iconTexture = new PIXI.Texture(PIXI.loader.resources[config.iconTexture || "ui-icon-default"].texture);
+		this.iconActiveTexture = new PIXI.Texture(PIXI.loader.resources[config.iconActiveTexture || "ui-icon-default"].texture);
 		this.icon = new PIXI.Sprite(this.iconTexture)
 		this.button.addChild(this.icon)
 
@@ -18,7 +17,6 @@ export default class Button {
 		this.button.interactive = true
 
 		this.handleClick = config.handleClick || function() { console.log('no click handler assigned')}
-
 
 		// handle hover
 		this.button.on("mouseover", () => {
@@ -38,7 +36,12 @@ export default class Button {
 		this.button.on('click', () => {
 			this.handleClick();
 		})
-
 		// this.parent.addChild(this.button)
+	}
+	setDefaultIcon() {
+		this.icon.setTexture(this.iconTexture);
+	}
+	setActiveIcon() {
+		this.icon.setTexture(this.iconActiveTexture);
 	}
 }

@@ -12,15 +12,24 @@ export function init() {
 
 	let stone = new Button({
 		iconTexture: "floor-stone",
-		handleClick: function() {tools.setBuild('floor-stone') }
+		handleClick: function() {tools.setTool({tile: 'floor-stone', mode: 'area', type: 'tile'}) }
 	})
+	
 	let wood = new Button({
 		iconTexture: "floor-wood",
-		handleClick: function() {tools.setBuild('floor-wood') }
+		handleClick: function() {tools.setTool({tile: 'floor-wood', mode: 'area', type: 'tile'}); }
+
+	})
+
+	let wall = new Button({
+		iconTexture: "wall-x",
+		handleClick: function() {tools.setTool({tile: 'wall-x', mode: 'line', type: 'wall'}) }
 	})
 	uiContainer.addChild(wood.button)
 	uiContainer.addChild(stone.button)
+	uiContainer.addChild(wall.button)
 	stone.button.position.x -= 64
+	wall.button.position.x -= 128
 
 	app.stage.addChild(uiContainer);
 	uiContainer.visible = false;

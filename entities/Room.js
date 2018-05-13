@@ -23,22 +23,26 @@ export default class Room {
 	render() {
 		for (let i = 0; i < this.sizeX; i++) {
 			for (let j = 0; j < this.sizeY; j++) {
-				let walls = [];
+				let walls = []
 				if (i == 0) {
 					walls[0] = "wall-x"
 					walls[1] = "wall-x"
+					// walls = ["wall-x", "wall-x", "wall-x", "wall-x"];
 				}
 				if (j == 0) {
 					walls[0] = "wall-x"
 					walls[2] = "wall-x"
+					// walls = ["wall-x", "wall-x", "wall-x", "wall-x"];
 				}
 				if (i == this.sizeX - 1) {
 					walls[2] = "wall-x"
 					walls[3] = "wall-x"
+					// walls = ["wall-x", "wall-x", "wall-x", "wall-x"];
 				}
 				if (j == this.sizeY - 1) {
 					walls[1] = "wall-x"
 					walls[3] = "wall-x"
+					// walls = ["wall-x", "wall-x", "wall-x", "wall-x"];
 				}
 
 				this.door.forEach(doorPair => {

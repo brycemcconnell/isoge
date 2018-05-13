@@ -1,8 +1,10 @@
 import {app} from './app.js'
 import {testLevel} from './levels/testLevel.js'
-import * as testUI from './ui/testUI.js'
+// import * as testUI from './ui/testUI.js'
+import * as toolsUI from './ui/tools.js'
 import * as layers from './layers.js'
 import * as buildUI from './ui/build.js'
+import * as destroyUI from './ui/destroy.js'
 import * as glow from './entities/glow.js' 
 
 
@@ -17,8 +19,10 @@ export default function setup() {
 	app.stage.group.enableSort = true;
 	scene = new PIXI.Container();
 	app.stage.addChild(scene)
-	testUI.init();
+	// testUI.init();
+	toolsUI.init();
 	buildUI.init();
+	destroyUI.init();
 	layers.init();
 	glow.initGlowTextures()
 

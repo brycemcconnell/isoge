@@ -110,25 +110,44 @@ export class Tile {
 		});
 		this.renderTile.on('mouseup', () => {
 			if (tools.currentTool.value == 'build' || tools.currentTool.value == 'destroy') {
-				testLevel.tiles.forEach(row => {
-					row.forEach(tile => {
-
-						if (tile.glow.visible) {
-							if (tools.currentTool.value == 'build') {
-								handleBuild(tile);
+				if (tools.currentTool.type == 'tile') {
+					testLevel.tiles.forEach(row => {
+						row.forEach(tile => {
+							if (tile.glow.visible) {
+								if (tools.currentTool.value == 'build') {
+									handleBuild(tile);
+								}
+								if (tools.currentTool.value == 'destroy') {
+									handleDestroy(tile);
+								}
 							}
-							if (tools.currentTool.value == 'destroy') {
-								handleDestroy(tile);
-							}
-						}
-						tile.glow.visible = false;
-						tile.glow.setTexture(glow.glowDefault);
-						tile.glow.tint = 0xffffff;
+							tile.glow.visible = false;
+							tile.glow.setTexture(glow.glowDefault);
+							tile.glow.tint = 0xffffff;
 
+						});
 					});
-				});
+				}
+				if (tools.currentTool.type == 'wall') {
+					testLevel.tiles.forEach(row => {
+						row.forEach(tile => {
+							if (tile.glow.visible) {
+								console.log('a')
+								if (tools.currentTool.value == 'build') {
+									tile.setWalls(["wall-x","wall-x"])
+									tile.buildWalls();
+								}
+								if (tools.currentTool.value == 'destroy') {
+									tile.setWalls([null, null, null, null])
+								}
+							}
+							tile.glow.visible = false;
+							tile.glow.setTexture(glow.glowDefault);
+							tile.glow.tint = 0xffffff;
+						});
+					});
+				}
 			}
-			console.log({x: this.x / 32, y: this.y / 32});
 		});
 		this.buildWalls();
 	}
@@ -137,6 +156,7 @@ export class Tile {
 		this.wallContainer.children.forEach(child => {
 			child.destroy();
 		});
+		this.wallContainer.children = []
 		this.walls = newWalls;
 	}
 

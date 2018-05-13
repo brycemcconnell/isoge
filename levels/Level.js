@@ -35,7 +35,7 @@ export default class Level {
 		this.tiles.forEach((row, i) => {
 			row.forEach((cell, j) => {
 				let pos = cell.renderTile.toGlobal(new PIXI.Point(0, 0))
-				if (pos.x < -32 || pos.y < -32 || pos.x > C.CANVAS_SIZEX -64 || pos.y > C.CANVAS_SIZEY -64) {
+				if (pos.x < -256 || pos.y < -256 || pos.x > C.CANVAS_SIZEX || pos.y > C.CANVAS_SIZEY -32) {
 					cell.renderTile.visible = false
 				} else {
 					cell.renderTile.visible = true
@@ -43,4 +43,5 @@ export default class Level {
 			})
 		})
 	}
+
 }

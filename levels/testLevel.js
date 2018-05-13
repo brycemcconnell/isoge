@@ -1,18 +1,18 @@
 import Level from './Level.js'
 import * as layers from './../layers.js'
-
+import * as C from '../constants.js';
 let grid = [];
 for (let i = 0; i < 40; i++) {
 	grid[i] = [];
 	for (let j = 0; j < 40; j++) {
-		grid[i][j] = 2
+		grid[i][j] = C.random(3)
 	}
 }
 export const testLevel = new Level({
 	grid: grid,
 	tileset: [
-		null,
-		"floor-wood",
+		"floor-grass",
+		"floor-dirt",
 		[
 			"floor-grass",
 			"floor-grass",

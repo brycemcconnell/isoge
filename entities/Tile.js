@@ -4,10 +4,10 @@ import * as tools from '../controls/tools.js';
 import {mouseDown} from '../controls/map.js';
 import {testLevel} from '../levels/testLevel.js';
 import * as glow from './glow.js';
-export const random = (max, min) => {
-	if (min == undefined) min = 0;
-	return Math.round(Math.random() * (max - min) + min);
-};
+import * as C from '../constants.js';
+
+import Plant from '../entities/Plant.js'
+
 let lastClicked;
 
 
@@ -17,7 +17,7 @@ export class Tile {
 		this.x = config.x * 32 || 0;
 		this.y = config.y * 32 || 0;
 
-		this.tile = Array.isArray(config.tile) ? config.tile[random(config.tile.length - 1)] : config.tile;
+		this.tile = Array.isArray(config.tile) ? config.tile[C.random(config.tile.length - 1)] : config.tile;
 		this.defaultTexture = new PIXI.Texture(PIXI.loader.resources[this.tile].texture);
 		
 		this.renderTile = new PIXI.Sprite(this.defaultTexture);
@@ -47,7 +47,10 @@ export class Tile {
 				if (tools.currentTool.value == 'move') {
 
 				}
-				if (tools.currentTool.value == 'build' || tools.currentTool.value == 'destroy') {
+				if (tools.currentTool.value == 'build' ||
+					tools.currentTool.value == 'destroy' ||
+					tools.currentTool.value == 'harvest' ||
+					tools.currentTool.value == 'seed') {
 					testLevel.tiles.forEach(row => {
 						row.forEach(tile => tile.glow.visible = false);
 					});
@@ -82,6 +85,8 @@ export class Tile {
 						loopTile.glow.setTexture(glow.glowFill);
 						if (tools.currentTool.value == 'destroy') {
 							loopTile.glow.tint = 0xff0000;
+						} else if (tools.currentTool.value =='seed') {
+							loopTile.glow.tint = 0xffff00;
 						} else {
 							loopTile.glow.tint = 0xffffff;
 						}
@@ -101,7 +106,10 @@ export class Tile {
 			testLevel.getTile(this.x / 32, this.y / 32);
 		});
 		this.renderTile.on('mouseup', () => {
-			if (tools.currentTool.value == 'build' || tools.currentTool.value == 'destroy') {
+			if (tools.currentTool.value == 'build' ||
+				tools.currentTool.value == 'destroy' ||
+				tools.currentTool.value == 'harvest' ||
+				tools.currentTool.value == 'seed') {
 				testLevel.tiles.forEach(row => {
 					row.forEach(tile => {
 						if (tile.glow.visible) {
@@ -110,6 +118,12 @@ export class Tile {
 							}
 							if (tools.currentTool.value == 'destroy') {
 								handleDestroy(tile);
+							}
+							if (tools.currentTool.value == 'seed') {
+								handleSeed(tile);
+							}
+							if (tools.currentTool.value == 'harvest') {
+								handleHarvest(tile);
 							}
 						}
 						tile.glow.visible = false;
@@ -120,14 +134,42 @@ export class Tile {
 				});
 			}
 		});
+		this.plowed = false;
+		this.seeded = false;
+		this.plant = new Plant(this);
+	}
+
+	setPlowed(boolean) {
+		this.plowed = boolean;
 	}
 }
 
 function handleBuild(tile) {
+	if (tile.plowed) {
+		tile.plowed = false;
+		tile.seeded = false;
+		tile.plant.reset();
+	}
+
 	let newTile = new PIXI.Texture(PIXI.loader.resources[tools.currentTool.tile].texture);
 	tile.renderTile.setTexture(newTile);
+	if (tools.currentTool.tile == 'floor-plowed') {
+		tile.setPlowed(true)
+	}
 }
 
 function handleDestroy(tile) {
+	tile.plowed = false;
+	tile.seeded = false;
+	tile.plant.reset();
 	tile.renderTile.setTexture(tile.defaultTexture);
+}
+
+function handleSeed(tile) {
+	if (tile.plowed) tile.plant.seed()
+}
+
+
+function handleHarvest(tile) {
+	if (tile.plant.maxStageReached)	tile.plant.reset()
 }

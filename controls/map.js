@@ -34,6 +34,7 @@ export function init() {
 		} else {
 			zoom(1, e.clientX, e.clientY)
 		}
+		testLevel.updateCulling()
 	})
 	
 }

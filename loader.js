@@ -11,12 +11,18 @@ export function load() {
   .add("ui-destroy", "assets/ui-destroy.png")
   .add("ui-destroy-active", "assets/ui-destroy-active.png")
   .add("ui-harvest", "assets/ui-harvest.png")
-  .add("ui-harvest-active", "assets/ui-harvest-active.png")
+  .add("ui-harvest-active", "assets/ui-harvest-active.png")  
+  .add("ui-plow", "assets/ui-plow.png")
+  .add("ui-plow-active", "assets/ui-plow-active.png")
 
   .add("ui-btn-up", "assets/ui-btn-up.png")
   .add("ui-btn-down", "assets/ui-btn-down.png")
   .add("ui-icon-default", "assets/ui-icon-default.png")
   .add("seed-icon", "assets/seed-icon.png")
+
+  .add("bush01", "assets/bush01.png")
+  .add("berry-bush01", "assets/berry-bush01.png")
+  .add("tree01", "assets/tree01.png")
 
   .add("floor-grass", "assets/floor-grass.png")
   .add("floor-dirt", "assets/floor-dirt.png")
@@ -39,13 +45,7 @@ export function load() {
   .add("floor-wood", "assets/floor-wood.png")
   .add("floor-stone", "assets/floor-stone.png")
   .add("elevated-floor-wood", "assets/elevated-floor-wood.png")
-  .add("wall", "assets/wall.png")
   .add("wall-x", "assets/wall-x.png")
-  .add("wall-y", "assets/wall-y.png")
-  .add("edge-wall-x", "assets/edge-wall-x.png")
-  .add("edge-wall-y", "assets/edge-wall-y.png")
-  .add("edge-wall-x-inner", "assets/edge-wall-x-inner.png")
-  .add("edge-wall-y-inner", "assets/edge-wall-y-inner.png")
 
   .add("glow-white", "assets/glow-white.png")
   .add("glow-white-fill", "assets/glow-white-fill.png")

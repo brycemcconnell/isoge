@@ -21,6 +21,7 @@ export class Tile {
 		this.defaultTexture = new PIXI.Texture(PIXI.loader.resources[this.tile].texture);
 		
 		this.renderTile = new PIXI.Sprite(this.defaultTexture);
+		// @Important - Perhaps set a height property that changes the anchor point, in order to have higher walls etc. (see the Plant and trees)
 		this.renderTile.scale.set(1, 1);
 		this.renderTile.visible = config.visible || false;
 
@@ -44,13 +45,7 @@ export class Tile {
 		this.renderTile.on('mouseover', () => {
 			this.glow.visible = true;
 			if (mouseDown) {
-				if (tools.currentTool.value == 'move') {
-
-				}
-				if (tools.currentTool.value == 'build' ||
-					tools.currentTool.value == 'destroy' ||
-					tools.currentTool.value == 'harvest' ||
-					tools.currentTool.value == 'seed') {
+				if (tools.currentTool.value !== 'move') {
 					testLevel.tiles.forEach(row => {
 						row.forEach(tile => tile.glow.visible = false);
 					});
@@ -106,10 +101,7 @@ export class Tile {
 			testLevel.getTile(this.x / 32, this.y / 32);
 		});
 		this.renderTile.on('mouseup', () => {
-			if (tools.currentTool.value == 'build' ||
-				tools.currentTool.value == 'destroy' ||
-				tools.currentTool.value == 'harvest' ||
-				tools.currentTool.value == 'seed') {
+			if (tools.currentTool.value !== 'move') {
 				testLevel.tiles.forEach(row => {
 					row.forEach(tile => {
 						if (tile.glow.visible) {
@@ -125,6 +117,9 @@ export class Tile {
 							if (tools.currentTool.value == 'harvest') {
 								handleHarvest(tile);
 							}
+							if (tools.currentTool.value == 'plow') {
+								handlePlow(tile);
+							}
 						}
 						tile.glow.visible = false;
 						tile.glow.setTexture(glow.glowDefault);
@@ -136,7 +131,7 @@ export class Tile {
 		});
 		this.plowed = false;
 		this.seeded = false;
-		this.plant = new Plant(this);
+		this.plant = new Plant(this, config.plant);
 	}
 
 	setPlowed(boolean) {
@@ -153,9 +148,6 @@ function handleBuild(tile) {
 
 	let newTile = new PIXI.Texture(PIXI.loader.resources[tools.currentTool.tile].texture);
 	tile.renderTile.setTexture(newTile);
-	if (tools.currentTool.tile == 'floor-plowed') {
-		tile.setPlowed(true)
-	}
 }
 
 function handleDestroy(tile) {
@@ -172,4 +164,10 @@ function handleSeed(tile) {
 
 function handleHarvest(tile) {
 	if (tile.plant.maxStageReached)	tile.plant.reset()
+}
+
+function handlePlow(tile) {
+	tile.setPlowed(true)
+	let newTile = new PIXI.Texture(PIXI.loader.resources[tools.currentTool.tile].texture);
+	tile.renderTile.setTexture(newTile);
 }

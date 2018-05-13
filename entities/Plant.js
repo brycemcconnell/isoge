@@ -1,8 +1,12 @@
 import * as plantTextures from '../resources/plant.js'
-import {dateTime} from '../game.js'
+import {dateTime} from '../game/time.js'
 export default class Plant {
 	constructor(tile, plant_config = {}) {
 		this.tile = tile;
+		this.tall = plant_config.tall || false;
+
+		this.grows = plant_config.grows || true;
+		this.perishesperishable = plant_config.perishable || true;
 		// Plant Config vars, these change on instancing the plant
 		this.growthHours = plant_config.growthHours || 24
 		this.maxStage = plant_config.maxStage || 6;
@@ -16,13 +20,18 @@ export default class Plant {
 		this.growthSoFar = 0;
 		this.wiltSet = 0; // holders used 
 		this.perishSet = 0; // holders used 
-		this.maxStageReached = false;
+		this.maxStageReached = plant_config.maxStageReached || false;
 
 		this.datePlanted;
 		this.harvestExpected;
 
-		this.sprite = new PIXI.Sprite(plantTextures.textures[0]);
-		this.sprite.visible = false;
+		this.sprite = new PIXI.Sprite(plant_config.texture || plantTextures.textures[0]);
+		this.sprite.visible = plant_config.visible || false;
+
+		if (this.tall) {
+			this.sprite.anchor.set(0, .5)
+		}
+		
 
 		this.tile.renderTile.addChild(this.sprite)
 	}
@@ -37,8 +46,16 @@ export default class Plant {
 	}
 
 	grow() {
-		this.stage = this.stage < this.maxStage ? this.stage + 1 : this.stage;
-		this.sprite.setTexture(plantTextures.textures[this.stage]);
+		if (this.grows){
+			this.stage = this.stage < this.maxStage ? this.stage + 1 : this.stage;
+			this.sprite.setTexture(plantTextures.textures[this.stage]);
+		}
+	}
+
+	setPerished() {
+		if (this.perishable) {
+			this.reset()
+		}
 	}
 
 	reset() {
@@ -48,6 +65,7 @@ export default class Plant {
 		this.maxStageReached = false;
 		this.wiltSet = 0;
 		this.perishSet = 0;
+		this.sprite.anchor.set(0, 0)
 	}
 
 	changePlantConfig(plant_config) {

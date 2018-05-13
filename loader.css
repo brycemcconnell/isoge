@@ -13,4 +13,10 @@
 .loader-wrapper {
 	position: absolute;
 	color: #fff;
+	transition: 1s;
+}
+
+.hidden {
+	opacity: 0;
+	visibility: hidden;
 }

@@ -12,7 +12,6 @@ export function setTool(obj) {
 	currentTool.value = obj.value ? obj.value : currentTool.value
 	currentTool.tile = obj.tile ? obj.tile : currentTool.tile
 	currentTool.mode = obj.mode ? obj.mode : currentTool.mode
-	console.log(currentTool)
 	if (currentTool.value == "build") {
 		buildUI.uiContainer.visible = true
 	} else {
@@ -23,13 +22,4 @@ export function setTool(obj) {
 	} else {
 		destroyUI.uiContainer.visible = false
 	}
-}
-
-export function useTool(tool) {
-	console.log('using' + tool)
-}
-
-export function setBuild(tile) {
-	currentTool.tile = tile
-	console.log(currentTool.tile)
 }

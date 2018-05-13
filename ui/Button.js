@@ -17,6 +17,8 @@ export default class Button {
 		this.button.interactive = true
 
 		this.handleClick = config.handleClick || function() { console.log('no click handler assigned')}
+		this.hotkey = config.hotkey || null;
+	
 
 		// handle hover
 		this.button.on("mouseover", () => {

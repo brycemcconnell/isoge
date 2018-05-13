@@ -10,6 +10,9 @@ import * as clockUI from './ui/clock.js'
 import * as glow from './entities/glow.js' 
 import * as plant from './resources/plant.js'
 import * as game from './game.js'
+import * as bush from './plants/bush.js'
+import * as berry_bush from './plants/berry_bush.js'
+import * as tree from './plants/tree.js'
 
 
 export let offsetX = 32 * 7;
@@ -18,7 +21,8 @@ export let offsetY = 0;
 export let scene;
 export let background;
 export default function setup() {
-
+	document.getElementById('loaderInfo').innerHTML = 'Done!';
+	setTimeout(() => {document.getElementById('loader').classList.add('hidden')}, 1000);
 	app.stage = new PIXI.display.Stage();
 	app.stage.group.enableSort = true;
 	background = new PIXI.Container();
@@ -27,6 +31,9 @@ export default function setup() {
 	app.stage.addChild(background)
 	app.stage.addChild(scene)
 	// testUI.init();
+	bush.init();
+	berry_bush.init();
+	tree.init();
 	toolsUI.init();
 	buildUI.init();
 	destroyUI.init();

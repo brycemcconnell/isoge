@@ -25,18 +25,12 @@ export function init() {
 		iconTexture: "wall-x",
 		handleClick: function() {tools.setTool({tile: 'wall-x', mode: 'line'}) }
 	})
-
-	let plowed = new Button({
-		iconTexture: "floor-plowed",
-		handleClick: function() {tools.setTool({tile: 'floor-plowed', mode: 'area'}) }
-	})
+	
 	uiContainer.addChild(wood.button)
 	uiContainer.addChild(stone.button)
 	uiContainer.addChild(wall.button)
-	uiContainer.addChild(plowed.button)
 	stone.button.position.x -= 64
 	wall.button.position.x -= 128
-	plowed.button.position.x -= 192
 
 	app.stage.addChild(uiContainer);
 	uiContainer.visible = false;

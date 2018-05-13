@@ -13,7 +13,7 @@ let uiGroup;
 let lastBuilt = 'floor-wood'
 
 export function init() {
-	let uiContainer = new PIXI.Container();
+	uiContainer = new PIXI.Container();
 	uiContainer.position.y = C.CANVAS_SIZEY - 64;
 
 	let move,
@@ -49,7 +49,8 @@ export function init() {
 		hotkey: hotkeys.tools.plow
 	})
 	seed = new Button({
-		iconTexture: "seed-icon",
+		iconTexture: "ui-seed",
+		iconActiveTexture: "ui-seed-active",
 		handleClick: function() {
 			tools.setTool({value: 'seed'});
 		},
@@ -76,10 +77,7 @@ export function init() {
 	uiGroup.forEach((child, index) => {
 		uiContainer.addChild(child.button)
 		child.button.position.x = index*64
-	})
-
-	uiGroup.forEach((child) => {
-		addInteraction(child)
+		addInteraction(child);
 	})
 
 	app.stage.addChild(uiContainer);

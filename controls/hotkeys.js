@@ -6,3 +6,6 @@ export const tools = {
 	harvest: 5,
 	destroy: 6
 }
+export const ingame = {
+	inventory: "e"
+}

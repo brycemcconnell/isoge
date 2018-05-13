@@ -11,6 +11,7 @@ export default class Button {
 		this.iconTexture = new PIXI.Texture(PIXI.loader.resources[config.iconTexture || "ui-icon-default"].texture);
 		this.iconActiveTexture = new PIXI.Texture(PIXI.loader.resources[config.iconActiveTexture || "ui-icon-default"].texture);
 		this.icon = new PIXI.Sprite(this.iconTexture)
+		this.iconStatus = false;
 		this.button.addChild(this.icon)
 
 		this.button.buttonMode = true
@@ -42,8 +43,10 @@ export default class Button {
 	}
 	setDefaultIcon() {
 		this.icon.setTexture(this.iconTexture);
+		this.iconStatus = false;
 	}
 	setActiveIcon() {
 		this.icon.setTexture(this.iconActiveTexture);
+		this.iconStatus = true;
 	}
 }

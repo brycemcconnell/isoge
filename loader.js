@@ -14,11 +14,14 @@ export function load() {
   .add("ui-harvest-active", "assets/ui-harvest-active.png")  
   .add("ui-plow", "assets/ui-plow.png")
   .add("ui-plow-active", "assets/ui-plow-active.png")
+  .add("ui-seed", "assets/ui-seed.png")
+  .add("ui-seed-active", "assets/ui-seed-active.png")
+  .add("ui-inventory", "assets/ui-inventory.png")
+  .add("ui-inventory-active", "assets/ui-inventory-active.png")
 
   .add("ui-btn-up", "assets/ui-btn-up.png")
   .add("ui-btn-down", "assets/ui-btn-down.png")
   .add("ui-icon-default", "assets/ui-icon-default.png")
-  .add("seed-icon", "assets/seed-icon.png")
 
   .add("bush01", "assets/bush01.png")
   .add("berry-bush01", "assets/berry-bush01.png")
@@ -55,6 +58,6 @@ export function load() {
 }
 
 function loadProgressHandler(loader, resource) {
-	loaderInfo.innerHTML = "loading: " + resource.url + ", " + parseFloat(loader.progress).toFixed(2) + "%";
-	loaderBar.style.width = loader.progress + "%";
+	document.getElementById('loaderInfo').innerHTML = "loading: " + resource.url + ", " + parseFloat(loader.progress).toFixed(2) + "%";
+	document.getElementById('loaderBar').style.width = loader.progress + "%";
 }

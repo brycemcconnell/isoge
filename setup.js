@@ -7,6 +7,7 @@ import * as layers from './layers.js'
 import * as buildUI from './ui/build.js'
 import * as destroyUI from './ui/destroy.js'
 import * as clockUI from './ui/clock.js'
+import * as ingameUI from './ui/ingame.js'
 import * as glow from './entities/glow.js' 
 import * as plant from './resources/plant.js'
 import * as game from './game.js'
@@ -38,6 +39,7 @@ export default function setup() {
 	buildUI.init();
 	destroyUI.init();
 	clockUI.init();
+	ingameUI.init();
 	layers.init();
 	glow.initGlowTextures()
 	plant.initPlantTextures()

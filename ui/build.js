@@ -2,13 +2,15 @@ import {app} from '../app.js'
 import * as C from '../constants.js'
 import Button from './Button.js'
 import * as tools from '../controls/tools.js'
+import * as layers from '../layers.js'
+import * as settings from './settings.js'
 
 export let uiContainer;
 export function init() {
 	uiContainer = new PIXI.Container();
-	uiContainer.position.y = C.CANVAS_SIZEY - 128;
-	uiContainer.position.x = 64;
-
+	uiContainer.position.y = C.CANVAS_SIZEY - settings.buttonSize*2;
+	uiContainer.position.x = settings.buttonSize;
+	uiContainer.parentGroup = layers.ui;
 
 	let stone = new Button({
 		iconTexture: "floor-stone",
@@ -29,8 +31,8 @@ export function init() {
 	uiContainer.addChild(wood.button)
 	uiContainer.addChild(stone.button)
 	uiContainer.addChild(wall.button)
-	stone.button.position.x += 64
-	wall.button.position.x += 128
+	stone.button.position.x += settings.buttonSize
+	wall.button.position.x += settings.buttonSize*2
 
 	app.stage.addChild(uiContainer);
 	uiContainer.visible = false;

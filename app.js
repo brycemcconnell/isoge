@@ -23,7 +23,8 @@ PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
 app.renderer = PIXI.autoDetectRenderer(C.CANVAS_SIZEX, C.CANVAS_SIZEY, {
     roundPixels: false,
     resolution: window.devicePixelRatio || 1,
-    backgroundColor: 0x87CEEB
+    // backgroundColor: 0x87CEEB
+    backgroundColor: 0x000000
 });
 const wrapper = document.getElementById("wrapper");
 wrapper.appendChild(app.view);

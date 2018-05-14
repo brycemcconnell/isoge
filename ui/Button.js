@@ -1,12 +1,13 @@
-import * as layers from '../layers.js'
+import * as settings from './settings.js'
 
 export default class Button {
-	constructor(config) {
+	constructor(config = {}) {
 		this.upTexture = new PIXI.Texture(PIXI.loader.resources[config.upTexture || "ui-btn-up"].texture);
 		this.downTexture = new PIXI.Texture(PIXI.loader.resources[config.downTexture || "ui-btn-down"].texture);
 
 		this.button = new PIXI.Sprite(this.upTexture)
-		this.button.parentGroup = layers.ui
+		this.button.width = settings.buttonSize;
+		this.button.height = settings.buttonSize;
 		// console.log(config.)
 		this.iconTexture = new PIXI.Texture(PIXI.loader.resources[config.iconTexture || "ui-icon-default"].texture);
 		this.iconActiveTexture = new PIXI.Texture(PIXI.loader.resources[config.iconActiveTexture || "ui-icon-default"].texture);
@@ -20,7 +21,6 @@ export default class Button {
 		this.handleClick = config.handleClick || function() { console.log('no click handler assigned')}
 		this.hotkey = config.hotkey || null;
 	
-
 		// handle hover
 		this.button.on("mouseover", () => {
 			

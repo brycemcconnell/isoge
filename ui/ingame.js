@@ -7,28 +7,38 @@ import {app} from '../app.js'
 import * as C from '../constants.js'
 import Button from './Button.js'
 import * as hotkeys from '../controls/hotkeys.js'
-
+import * as inventoryWindowInstance from './inventoryWindowInstance.js'
+import * as layers from '../layers.js'
+import * as settings from './settings.js'
 export let uiContainer;
 let uiGroup;
 
-let inventory;
+export let inventory;
 
 export function init() {
 	uiContainer = new PIXI.Container();
+	uiContainer.position.x = settings.uiOffset;
+	uiContainer.position.y = settings.uiOffset;
 	uiGroup = [];
-
+	uiContainer.parentGroup = layers.ui;
+	uiGroup.push(inventory = new Button({
+		handleClick: function() {
+			resetView();
+		},
+	}))
 	uiGroup.push(inventory = new Button({
 		iconTexture: "ui-inventory",
 		iconActiveTexture: "ui-inventory-active",
 		handleClick: function() {
-
+			inventoryWindowInstance.handleToggle();
 		},
 		hotkey: hotkeys.ingame.inventory
 	}))
+	
 
 	uiGroup.forEach((child, index) => {
 		uiContainer.addChild(child.button)
-		child.button.position.x = index*64
+		child.button.position.x = index*settings.buttonSize + index*settings.buttonSpacing;
 		addInteraction(child);
 	})
 

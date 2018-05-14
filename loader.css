@@ -1,7 +1,9 @@
 .loader-container {
-	width: 200px;
+	width: 100%;
 	height: 20px;
 	border: 1px solid #000;
+	border: 2px outset #fff;
+    padding: 2px;
 }
 
 .loader-content {
@@ -11,9 +13,16 @@
 }
 
 .loader-wrapper {
+	width: 200px;
+	font-family: "PixelMPlus10";
 	position: absolute;
 	color: #fff;
-	transition: 1s;
+	transition: opacity, visibility 1s;
+	position: absolute;
+    left: 50%;
+    top: 50%;
+    text-align: center;
+    transform: translate(-50%, -50%);
 }
 
 .hidden {

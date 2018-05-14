@@ -2,69 +2,30 @@ import Level from './Level.js'
 import * as layers from './../layers.js'
 import * as C from '../constants.js';
 let grid = [];
-for (let i = 0; i < 40; i++) {
+noise.seed(Math.random());
+for (let i = 0; i < 30; i++) {
 	grid[i] = [];
-	for (let j = 0; j < 40; j++) {
-		grid[i][j] = C.random(3)
+	for (let j = 0; j < 30; j++) {
+		grid[i][j] = Math.random() > .9 ? 2 : 1;
+		var value = noise.simplex2(i / 40, j / 40);
+		if (value > 0.5) {
+			grid[i][j] = 0;
+		}
 	}
 }
 export const testLevel = new Level({
 	grid: grid,
 	tileset: [
+		"floor-water",
 		"floor-grass",
-		"floor-dirt",
 		[
-			"floor-grass",
-			"floor-grass",
-			"floor-grass",
-			"floor-grass",
-			"floor-grass",
-			"floor-grass",
-			"floor-grass",
-			"floor-grass",
-			"floor-grass",
-			"floor-grass",
-			"floor-grass",
-			"floor-grass",
+			"floor-dirt",
 			"floor-grass-rock1",
 			"floor-grass-rock2",
 			"floor-grass-rock3",
 			"floor-grass-dirt1",
 			"floor-grass-dirt2",
 			"floor-grass-dirt3"
-		],
-		"floor-grass",
-		"floor-grass"
+		]
 	],
-	// custom: {
-	// 	testTile1: {
-	// 		tile: "floor-wood",
-	// 		x: 5, 
-	// 		y: 5,
-	// 		walls: ["wall-x", null, null, null],
-	// 		layer: layers.floor
-	// 	},
-	// 	testTile2: {
-	// 		tile: "floor-wood",
-	// 		x: 7, 
-	// 		y: 5,
-	// 		walls: [null, "wall-x"],
-	// 		layer: layers.floor
-	// 	},
-	// 	testTile3: {
-	// 		tile: "floor-wood",
-	// 		x: 9, 
-	// 		y: 5,
-	// 		walls: [null, null, "wall-x"],
-	// 		layer: layers.floor
-	// 	},
-	// 	testTile4: {
-	// 		tile: "floor-wood",
-	// 		x: 11, 
-	// 		y: 5,
-	// 		walls: [null, null, null, "wall-x"],
-	// 		layer: layers.floor
-	// 	},
-	// }
-
 })

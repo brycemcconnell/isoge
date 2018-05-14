@@ -27,23 +27,10 @@ export function handleHourlyTick() {
 	testLevel.tiles.forEach((row, i) => {
 		row.forEach((cell, j) => {			
 			cell.renderTile.tint = `0x${PIXI.utils.rgb2hex([skyV, skyV, skyV]).toString(16)}`
-			cell.plant.growthSoFar += 1
-			if (cell.plant.growthSoFar % cell.plant.growRate == 0) {
-				if (C.random(10) > 1 && cell.plowed && cell.seeded) {
-					cell.plant.grow()
-				}
+			if (cell.plant && cell.plant.grows) {
+				handlePlantLogic(cell.plant)
 			}
-			if (cell.plant.maxStage == cell.plant.stage && !cell.plant.maxStageReached) {
-				cell.plant.maxStageReached = true;
-				cell.plant.wiltSet = cell.plant.wilt + cell.plant.growthSoFar
-				cell.plant.perishSet = cell.plant.perish + cell.plant.growthSoFar
-			}
-			if (cell.plant.growthSoFar > cell.plant.wiltSet && cell.plant.maxStageReached) {
-				cell.plant.setWilted()
-				if (cell.plant.growthSoFar > cell.plant.perishSet) {
-					cell.plant.setPerished()
-				}	
-			}
+			
 		})
 	})
 	if (hour < 23) {
@@ -54,4 +41,24 @@ export function handleHourlyTick() {
 		dateTime = {hour: hour, day: day}
 	}
 	clockUI.update(`Day ${day}, ${hour}:00${hour < 12 ? 'am' : 'pm'} (☀${skyV.toFixed(2)})`)
+}
+
+function handlePlantLogic(plant) {
+	plant.growthSoFar += 1
+	if (plant.growthSoFar % plant.growRate == 0) {
+		if (C.random(10) > 1) {
+			plant.grow()
+		}
+	}
+	if (plant.maxStage == plant.stage && !plant.maxStageReached) {
+		plant.maxStageReached = true;
+		plant.wiltSet = plant.wilt + plant.growthSoFar
+		plant.perishSet = plant.perish + plant.growthSoFar
+	}
+	if (plant.growthSoFar > plant.wiltSet && plant.maxStageReached && plant.grows) {
+		plant.setWilted()
+		if (plant.growthSoFar > plant.perishSet) {
+			plant.setPerished()
+		}	
+	}
 }

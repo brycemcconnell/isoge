@@ -3,7 +3,8 @@ import * as C from '../constants.js'
 import Button from './Button.js'
 import * as tools from '../controls/tools.js'
 import * as hotkeys from '../controls/hotkeys.js'
-
+import * as layers from '../layers.js'
+import * as settings from './settings.js'
 export let uiContainer;
 let uiGroup;
 
@@ -14,8 +15,9 @@ let lastBuilt = 'floor-wood'
 
 export function init() {
 	uiContainer = new PIXI.Container();
-	uiContainer.position.y = C.CANVAS_SIZEY - 64;
-
+	uiContainer.position.y = C.CANVAS_SIZEY - settings.buttonSize - settings.uiOffset;
+	uiContainer.position.x = settings.uiOffset;
+	uiContainer.parentGroup = layers.ui;
 	let move,
 		build,
 		plow,
@@ -76,7 +78,7 @@ export function init() {
 	uiGroup = [move, build, plow, seed, harvest, destroy]
 	uiGroup.forEach((child, index) => {
 		uiContainer.addChild(child.button)
-		child.button.position.x = index*64
+		child.button.position.x = index*settings.buttonSize + settings.buttonSpacing*index
 		addInteraction(child);
 	})
 

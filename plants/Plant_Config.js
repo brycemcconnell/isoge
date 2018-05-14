@@ -6,14 +6,15 @@
 export class Plant_Config {
 	constructor(config) {
 		this.grows = config.grows
-		this.harvestableperishable = config.perishable
+		this.harvestable = config.harvestable
 		this.growthHours  = config.growthHours
 		this.maxStage = config.maxStage
 		this.maxStageReached = config.maxStageReached
 		this.wilt = config.wilt
-		this.perish  = config.perish
+		this.perishable  = config.perishable
 		this.texture = config.texture
 		this.visible = config.visible
 		this.tall = config.tall
+		this.yielder = config.yielder
 	}
 }

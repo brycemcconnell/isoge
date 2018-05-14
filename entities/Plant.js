@@ -1,12 +1,16 @@
 import * as plantTextures from '../resources/plant.js'
+import * as C from '../constants.js';
 import {dateTime} from '../game/time.js'
-export default class Plant {
-	constructor(tile, plant_config = {}) {
-		this.tile = tile;
-		this.tall = plant_config.tall || false;
+import Yielder from './Yielder.js';
+import * as default_config from '../plants/default_config.js';
 
-		this.grows = plant_config.grows || true;
-		this.perishesperishable = plant_config.perishable || true;
+export default class Plant {
+	constructor(tile, plant_config = default_config.config) {
+		this.tile = tile;
+		this.tall = plant_config.tall !== null ? plant_config.tall : false;
+		this.yielder = plant_config.yielder || new Yielder({name: 'No item', quantity: [0, 10]});
+		this.grows = plant_config.grows !== null ? plant_config.grows :  true;
+		this.perishable = plant_config.perishable !== null ? plant_config.perishable : true;
 		// Plant Config vars, these change on instancing the plant
 		this.growthHours = plant_config.growthHours || 24
 		this.maxStage = plant_config.maxStage || 6;

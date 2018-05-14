@@ -2,7 +2,8 @@ import {app} from '../app.js'
 import * as C from '../constants.js'
 import Button from './Button.js'
 import * as tools from '../controls/tools.js'
-
+import * as money from './money.js';
+import * as layers from '../layers.js'
 export let uiContainer;
 let clock;
 export function init() {
@@ -11,6 +12,9 @@ export function init() {
 	clock = new PIXI.Text('This is a PixiJS text', C.textStyle)
 	uiContainer.addChild(clock)
 	app.stage.addChild(uiContainer);
+	uiContainer.parentGroup = layers.ui;
+
+	uiContainer.addChild(money.container);
 }
 
 export function update(newValue) {

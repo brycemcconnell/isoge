@@ -19,15 +19,28 @@ export function load() {
   .add("ui-inventory", "assets/ui-inventory.png")
   .add("ui-inventory-active", "assets/ui-inventory-active.png")
 
+
+  .add("ui-close", "assets/ui-close.png")
+  .add("ui-window-corner", "assets/ui-window-corner.png")
+  .add("ui-window-top", "assets/ui-window-topleft.png")
+  .add("ui-window-left", "assets/ui-window-topleft.png")
+  .add("ui-window-bottom", "assets/ui-window-bottomright.png")
+  .add("ui-window-right", "assets/ui-window-bottomright.png")
+
+  .add("coin", "assets/coin.png")
+
   .add("ui-btn-up", "assets/ui-btn-up.png")
   .add("ui-btn-down", "assets/ui-btn-down.png")
   .add("ui-icon-default", "assets/ui-icon-default.png")
 
   .add("bush01", "assets/bush01.png")
   .add("berry-bush01", "assets/berry-bush01.png")
+  .add("tree00", "assets/tree00.png")
   .add("tree01", "assets/tree01.png")
+  .add("tree02", "assets/tree02.png")
 
   .add("floor-grass", "assets/floor-grass.png")
+  .add("floor-water", "assets/floor-water.json")
   .add("floor-dirt", "assets/floor-dirt.png")
   .add("floor-plowed", "assets/floor-plowed.png")
 

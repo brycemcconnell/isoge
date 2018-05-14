@@ -1,15 +1,14 @@
-import {offsetX, offsetY, scene} from './../setup.js';
+import {scene} from './../setup.js';
 import * as layers from './../layers.js';
 import * as tools from '../controls/tools.js';
 import {mouseDown} from '../controls/map.js';
 import {testLevel} from '../levels/testLevel.js';
 import * as glow from './glow.js';
 import * as C from '../constants.js';
-
+import PopupText from '../ui/components/PopupText.js'
 import Plant from '../entities/Plant.js'
 
-let lastClicked;
-
+let lastClicked = {x: -1, y: -1};
 let glowTiles = [];
 export class Tile {
 	constructor(config) {
@@ -17,12 +16,32 @@ export class Tile {
 		this.x = config.x * 32 || 0;
 		this.y = config.y * 32 || 0;
 		this.playerTile = false;
-
+		this.water = config.water || false;
+		this.popupText= null;
+		this.animated = config.animated || false;
 		this.tile = Array.isArray(config.tile) ? config.tile[C.random(config.tile.length - 1)] : config.tile;
-		this.defaultTexture = new PIXI.Texture(PIXI.loader.resources[this.tile].texture);
 		
-		this.renderTile = new PIXI.Sprite(this.defaultTexture);
-		// @Important - Perhaps set a height property that changes the anchor point, in order to have higher walls etc. (see the Plant and trees)
+		this.defaultTexture;
+		this.renderTile;
+		this.textures = [];
+		if (this.animated) {
+			for (let i = 0; i < config.frames; i++) {
+				let texture = PIXI.Texture.fromFrame(config.animSprite + '0' + (i + 1) + '.png');
+				this.textures.push(texture);
+			}
+			this.renderTile = new PIXI.extras.AnimatedSprite(this.textures);
+			this.renderTile.animationSpeed = .03;
+			this.renderTile.play();
+			this.renderTile.parentGroup = config.layer || layers.water;
+		}
+		
+		if (!this.animated) {
+			this.defaultTexture = new PIXI.Texture(PIXI.loader.resources[this.tile].texture);
+			this.renderTile = new PIXI.Sprite(this.defaultTexture);
+			this.renderTile.parentGroup = config.layer || layers.floor;
+			// @Important - Perhaps set a height property that changes the anchor point, in order to have higher walls etc. (see the Plant and trees)
+			this.renderTile.anchor.set(0, -0.25);
+		}
 		this.renderTile.scale.set(1, 1);
 		this.renderTile.visible = config.visible || false;
 
@@ -33,7 +52,7 @@ export class Tile {
 		
 		this.isoX = this.x - this.y;
 		this.isoY = (this.x + this.y) / 2;
-		this.renderTile.parentGroup = config.layer || layers.defaults;
+		
 		this.renderTile.interactive = config.interactive || false;
 		this.renderTile.hitArea = new PIXI.Polygon([
 			32, 32,
@@ -41,7 +60,7 @@ export class Tile {
 			32, 64,
 			0, 48
 		]);
-		this.renderTile.position.set(this.isoX + offsetX, this.isoY + offsetY);
+		this.renderTile.position.set(this.isoX, this.isoY);
 		this.scene.addChild(this.renderTile);
 		this.renderTile.on('mouseover', () => {
 			this.glow.visible = true;
@@ -82,7 +101,7 @@ export class Tile {
 					tilesToUpdate.forEach(loopTile => {
 						loopTile.glow.setTexture(glow.glowFill);
 						if (tools.currentTool.value == 'destroy') {
-							loopTile.glow.tint = 0xff0000;
+							loopTile.glow.tint = 0xff5500;
 						} else if (tools.currentTool.value =='seed') {
 							loopTile.glow.tint = 0xffff00;
 						} else {
@@ -119,7 +138,7 @@ export class Tile {
 		});
 		this.plowed = false;
 		this.seeded = config.plant ? true : false;
-		this.plant = new Plant(this, config.plant);
+		this.plant = config.plant ? new Plant(this, config.plant) : null;
 	}
 
 	setPlowed(boolean) {
@@ -139,32 +158,51 @@ function handleBuild(tile) {
 }
 
 function handleDestroy(tile) {
-	tile.plowed = false;
-	tile.seeded = false;
-	tile.playerTile = false;
-	tile.plant.reset();
-	tile.renderTile.setTexture(tile.defaultTexture);
+	if (tile.playerTile) {
+		tile.plowed = false;
+		tile.seeded = false;
+		tile.playerTile = false;
+		tile.plant.reset();
+		tile.renderTile.setTexture(tile.defaultTexture);
+	}
 }
 
 function handleSeed(tile) {
-	if (tile.plowed) tile.plant.seed()
+	if (tile.plowed) {
+		tile.plant = new Plant(tile);
+		tile.plant.seed()
+	}
 }
 
 
 function handleHarvest(tile) {
-	if (tile.plant.maxStageReached)	tile.plant.reset()
+	if (tile.seeded && tile.plant.maxStageReached) {
+		let yielder = tile.plant.yielder;
+		yielder.generateQuantity();
+		let text = `+ ${yielder.result} ${yielder.name}`;
+		if (yielder.result == 0) {
+			text = 'Nothing found!';
+		}
+		let popupText = new PopupText({text: text});
+		scene.addChild(popupText.content);
+		let pos = tile.renderTile.position;
+		popupText.content.position.set(pos.x, pos.y);
+		popupText.run();
+		tile.plant.reset();
+	}
 }
 
 function handlePlow(tile) {
 	tile.setPlowed(true)
 	let newTile = new PIXI.Texture(PIXI.loader.resources[tools.currentTool.tile].texture);
 	tile.renderTile.setTexture(newTile);
+	tile.playerTile = true;
 }
 
 function allTilesClear(glowTiles) {
 	let result = true;
 	glowTiles.some(tile => {
-		if (tile.plowed || tile.seeded || tile.playerTile) {
+		if (tile.plowed || tile.seeded || tile.playerTile || tile.water) {
 			result = false;
 			return true;
 		}
@@ -173,7 +211,7 @@ function allTilesClear(glowTiles) {
 }
 
 function isTileClear(tile) {
-	if (tile.plowed || tile.seeded || tile.playerTile) {
+	if (tile.plowed || tile.seeded || tile.playerTile || tile.water) {
 		return false;
 	}
 	return true;

@@ -22,4 +22,10 @@ export function setTool(obj) {
 	} else {
 		destroyUI.uiContainer.visible = false
 	}
+	// temp fix for UI buttons not changing mode properly (maybe just use this instead?)
+	if (currentTool.value == "harvest" ||
+		currentTool.value == "destroy" ||
+		currentTool.value == "seed") {
+		currentTool.mode = 'area'
+	}
 }

@@ -1,6 +1,7 @@
 import {app} from '../app.js'
 import {testLevel} from '../levels/testLevel.js'
 import * as clockUI from '../ui/clock.js'
+import * as fpsUI from '../ui/fps.js'
 import * as C from '../constants.js'
 
 export let timer = 0;
@@ -13,7 +14,8 @@ export let dateTime;
 
 export function handleTime() {
 	if (Math.floor(timer / 1000) < Math.floor((timer + app.ticker.elapsedMS)/ 1000)) {
- 		seconds += 1
+ 		seconds += 1;
+ 		fpsUI.update();
  		if (seconds % hourRate == 0) {
  			handleHourlyTick()
  		}

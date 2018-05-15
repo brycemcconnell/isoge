@@ -10,6 +10,12 @@ import Plant from '../entities/Plant.js'
 
 let lastClicked = {x: -1, y: -1};
 let glowTiles = [];
+let glowTileContainer = new PIXI.ParticleContainer();
+
+export function initGlowContainer() {
+	scene.addChild(glowTileContainer);
+	glowTileContainer.parentGroup = layers.select;
+}
 export class Tile {
 	constructor(config) {
 		this.scene = scene;
@@ -45,13 +51,17 @@ export class Tile {
 		this.renderTile.scale.set(1, 1);
 		this.renderTile.visible = config.visible || false;
 
-		this.glow = new PIXI.Sprite(PIXI.loader.resources['glow-white'].texture);
-		this.renderTile.addChild(this.glow);
-		this.glow.visible = false;
-		this.glow.parentGroup = layers.select;
+
+		this.glow = new PIXI.Sprite(glow.glowDefault);
 		
+		this.glow.visible = false;
+		glowTileContainer.addChild(this.glow);
+
 		this.isoX = this.x - this.y;
 		this.isoY = (this.x + this.y) / 2;
+
+		this.glow.position.x = this.isoX;
+		this.glow.position.y = this.isoY;
 		
 		this.renderTile.interactive = config.interactive || false;
 		this.renderTile.hitArea = new PIXI.Polygon([
@@ -99,7 +109,7 @@ export class Tile {
 					}
 					let thereWasCollision = false;
 					tilesToUpdate.forEach(loopTile => {
-						loopTile.glow.setTexture(glow.glowFill);
+						// loopTile.glow.setTexture(glow.glowFill);
 						if (tools.currentTool.value == 'destroy') {
 							loopTile.glow.tint = 0xff5500;
 						} else if (tools.currentTool.value =='seed') {

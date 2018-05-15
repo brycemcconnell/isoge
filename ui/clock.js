@@ -3,6 +3,7 @@ import * as C from '../constants.js'
 import Button from './Button.js'
 import * as tools from '../controls/tools.js'
 import * as money from './money.js';
+import * as fps from './fps.js';
 import * as layers from '../layers.js'
 export let uiContainer;
 let clock;
@@ -13,7 +14,7 @@ export function init() {
 	uiContainer.addChild(clock)
 	app.stage.addChild(uiContainer);
 	uiContainer.parentGroup = layers.ui;
-
+	uiContainer.addChild(fps.container);
 	uiContainer.addChild(money.container);
 }
 

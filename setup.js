@@ -6,6 +6,7 @@ import * as toolsUI from './ui/tools.js'
 import * as layers from './layers.js'
 import * as buildUI from './ui/build.js'
 import * as destroyUI from './ui/destroy.js'
+import * as fpsUI from './ui/fps.js'
 import * as clockUI from './ui/clock.js'
 import * as moneyUI from './ui/money.js'
 import * as ingameUI from './ui/ingame.js'
@@ -18,6 +19,8 @@ import * as berry_bush from './plants/berry_bush.js'
 import * as tree from './plants/tree.js'
 import * as inventoryWindowInstance from './ui/inventoryWindowInstance.js'
 import * as treeTextures from './resources/tree.js';
+
+import * as TileUtils from './entities/Tile.js';
 
 export let grass;
 export let scene;
@@ -40,11 +43,13 @@ export default function setup() {
 	buildUI.init();
 	destroyUI.init();
 	moneyUI.init();
+	fpsUI.init();
 	clockUI.init();
 	ingameUI.init();
 	inventoryWindowInstance.init();
 	layers.init();
 	glow.initGlowTextures()
+	TileUtils.initGlowContainer();
 	plant.initPlantTextures()
 	default_config.init();
 	

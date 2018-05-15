@@ -29,3 +29,8 @@
 	opacity: 0;
 	visibility: hidden;
 }
+
+@font-face {
+	font-family: PixelMPlus10;
+	src: url(./assets/font/PixelMplus10-Regular.ttf);
+}

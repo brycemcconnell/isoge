@@ -1,4 +1,6 @@
+import {app} from '../app.js'
 import {scene} from '../setup.js'
+import * as C from '../constants.js'
 import * as tools from './tools.js'
 import {testLevel} from '../levels/testLevel.js'
 export let mouseDown = false;
@@ -23,7 +25,7 @@ export function init() {
 	})
 
 	window.addEventListener('mouseup', function(e) {
-			mouseDown = false;
+		mouseDown = false;
 	})
 
 	
@@ -46,11 +48,13 @@ export function init() {
 		if (e.key == 'd') {	keys.d = false; }
 	})
 	window.addEventListener('wheel', function(e) {
+		let mousePos = app.renderer.plugins.interaction.mouse.global
+		console.log(scene.toGlobal(new PIXI.Point(0,0)))
 		if (scrollEnabled) {
 			if (e.deltaY > 0) {
-				zoom(-1, e.clientX, e.clientY)
+				zoom(-1, mousePos.x, mousePos.y)
 			} else {
-				zoom(1, e.clientX, e.clientY)
+				zoom(1, mousePos.x, mousePos.y)
 			}
 			testLevel.updateCulling()
 		}
@@ -63,10 +67,13 @@ function zoom(amnt, x, y) {
 		return
 	}
 	// Note the use of Math.sign is in case zoom amnt changes
-	scene.position.x += x/2 * -Math.sign(amnt)
-	scene.position.y += y/2 * -Math.sign(amnt)
+	// @Important, this zoom is broken
 	scene.scale.x += amnt;
 	scene.scale.y += amnt;
+
+	scene.position.x += C.CANVAS_SIZEX / scene.scale.x
+	scene.position.y += C.CANVAS_SIZEY / scene.scale.y
+	
 }
 
 export function handleScenePan(x, y) {

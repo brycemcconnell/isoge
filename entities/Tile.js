@@ -13,7 +13,7 @@ let glowTiles = [];
 let glowTileContainer;
 
 export function initGlowContainer() {
-	glowTileContainer = new PIXI.ParticleContainer({alpha:true});
+	glowTileContainer = new PIXI.Container();
 	glowTileContainer.visible = false;
 	scene.addChild(glowTileContainer);
 	glowTileContainer.parentGroup = layers.select;
@@ -57,7 +57,6 @@ export class Tile {
 
 		this.glow = new PIXI.Sprite(glow.glowDefault);
 		this.glow.visible = false;
-
 		glowTileContainer.addChild(this.glow);
 
 		this.isoX = this.x - this.y;
@@ -112,7 +111,7 @@ export class Tile {
 					}
 					let thereWasCollision = false;
 					tilesToUpdate.forEach(loopTile => {
-						// loopTile.glow.setTexture(glow.glowFill);
+						loopTile.glow.setTexture(glow.glowFill);
 						if (tools.currentTool.value == 'destroy') {
 							loopTile.glow.tint = 0xff5500;
 						} else if (tools.currentTool.value =='seed') {

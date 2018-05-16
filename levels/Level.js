@@ -6,10 +6,8 @@ import {berry_bush} from '../plants/berry_bush.js'
 import * as tree from '../plants/tree.js'
 export default class Level {
 	constructor(config) {
-		// this.background;
 		this.grid = config.grid
 		this.tileset = config.tileset
-		// this.custom = config.custom
 		this.tiles = [];
 	}
 

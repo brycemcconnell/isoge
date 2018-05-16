@@ -13,6 +13,7 @@
 }
 
 .loader-wrapper {
+	z-index: 99;
 	width: 200px;
 	font-family: "PixelMPlus10";
 	position: absolute;

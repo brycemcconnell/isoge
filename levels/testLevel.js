@@ -3,9 +3,9 @@ import * as layers from './../layers.js'
 import * as C from '../constants.js';
 let grid = [];
 noise.seed(Math.random());
-for (let i = 0; i < 30; i++) {
+for (let i = 0; i < 40; i++) {
 	grid[i] = [];
-	for (let j = 0; j < 30; j++) {
+	for (let j = 0; j < 40; j++) {
 		grid[i][j] = Math.random() > .9 ? 3 :
 					 Math.random() > .8 ? 2 : 1;
 		var value = noise.simplex2(i / 40, j / 40);

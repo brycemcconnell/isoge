@@ -26,9 +26,9 @@ export let grass;
 export let scene;
 export let background;
 export default function setup() {
+	document.getElementById('loaderInfo').innerHTML = 'Generating level';
 	document.fonts.load('10px "PixelMPlus10"').then(() => {
-		document.getElementById('loaderInfo').innerHTML = 'Done!';
-		setTimeout(() => {document.getElementById('loader').classList.add('hidden')}, 1000);
+		
 		app.stage = new PIXI.display.Stage();
 		stretch('stretch-height');
 		app.stage.group.enableSort = true;
@@ -54,6 +54,7 @@ export default function setup() {
 		plant.initPlantTextures()
 		default_config.init();
 		
+		setTimeout(() => {document.getElementById('loader').classList.add('hidden')}, 1000);
 		testLevel.init();
 		
 		

@@ -26,6 +26,7 @@ import * as textures from './textures.js';
 import * as map_controls from './controls/map.js'
 import * as sessionControls from './controls/sessionControls.js'
 
+import {Actor} from './entities/Actor.js';
 
 import * as TileUtils from './entities/Tile.js';
 
@@ -51,7 +52,7 @@ export default function setup() {
 		fish.init();
 		berry_bush.init();
 
-
+		// let bob = new Actor();
 		
 		treeTextures.initTreeTextures();
 		toolsUI.init();

@@ -1,10 +1,9 @@
 import * as C from '../constants.js';
-import {dateTime} from '../game/time.js'
+import {dateTime} from '../game/time.js';
 import Yielder from './Yielder.js';
-
-import * as pumpkin from '../plants/pumpkin.js';
 import * as defaultPlant from '../plants/defaultPlant.js';
 import * as layers from '../layers.js';
+
 export default class Plant {
 	constructor(tile, plant_config = defaultPlant.config) {
 		this.animated = plant_config.animated || false;
@@ -16,14 +15,14 @@ export default class Plant {
 		this.grows = plant_config.grows !== null ? plant_config.grows :  true;
 		this.perishable = plant_config.perishable !== null ? plant_config.perishable : true;
 		// Plant Config vars, these change on instancing the plant
-		this.growthHours = plant_config.growthHours || 24
+		this.growthHours = plant_config.growthHours || 24;
 		this.maxStage = plant_config.maxStage || 6;
 		this.wilt = plant_config.wilt || 12; // hours after max stage reached
 		this.perish = plant_config.perish || 24; // hours after max stage reached
 
 		this.wilted = false;
 
-		this.growRate = Math.floor(this.growthHours / this.maxStage)
+		this.growRate = Math.floor(this.growthHours / this.maxStage);
 
 		// These vars change dynamically
 		this.stage = 0;
@@ -45,22 +44,22 @@ export default class Plant {
 			this.sprite.animationSpeed = .2;
 			this.sprite.gotoAndPlay(C.random(this.frames));
 			this.sprite.onLoop = () => {
-				this.sprite.stop()
+				this.sprite.stop();
 				setTimeout(() => {
 					this.sprite.play();
-				}, C.random(3000, 1000))
-			}
+				}, C.random(3000, 1000));
+			};
 			// Put fish on the same layer as floor tiles/trees, so that they render in order of tile (eg from top of screen to the bottom)
-			this.sprite.parentGroup = layers.floor
+			this.sprite.parentGroup = layers.floor;
 		}
 		this.sprite.visible = plant_config.visible || false;
 		
 		if (this.tall) {
-			this.sprite.anchor.set(0, .5)
+			this.sprite.anchor.set(0, .5);
 		}
 		
 
-		this.tile.renderTile.addChild(this.sprite)
+		this.tile.renderTile.addChild(this.sprite);
 	}
 
 	seed() {
@@ -70,7 +69,7 @@ export default class Plant {
 
 		this.sprite.setTexture(this.textures[this.stage]);
 		this.sprite.visible = true;
-		this.sprite.tint = 0xffffff
+		this.sprite.tint = 0xffffff;
 	}
 
 	grow() {
@@ -82,7 +81,7 @@ export default class Plant {
 
 	setPerished() {
 		if (this.perishable) {
-			this.reset()
+			this.reset();
 		}
 	}
 
@@ -94,7 +93,7 @@ export default class Plant {
 		this.wiltSet = 0;
 		this.wilted = false;
 		this.perishSet = 0;
-		this.sprite.anchor.set(0, 0)
+		this.sprite.anchor.set(0, 0);
 	}
 
 	changePlantConfig(plant_config) {
@@ -106,7 +105,7 @@ export default class Plant {
 	}
 
 	setWilted() {
-		this.sprite.tint = 0xc2aa88
+		this.sprite.tint = 0xc2aa88;
 		this.wilted = true;
 	}
 }

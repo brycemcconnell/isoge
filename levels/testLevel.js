@@ -23,11 +23,11 @@ export function createLevel() {
 
 	level = new Level({
 		grid: grid,
-		tileset: [
-			textures.water,
-			textures.floorGrass,
-			textures.floorDirt,
-			[
+		tileset: {
+			"water":textures.water,
+			"grass":textures.floorGrass,
+			"dirt":textures.floorDirt,
+			"grassDoodad":[
 				textures.floorGrassRock1,
 				textures.floorGrassRock2,
 				textures.floorGrassRock3,
@@ -35,6 +35,6 @@ export function createLevel() {
 				textures.floorGrassDirt2,
 				textures.floorGrassDirt3,
 			]
-		],
+		},
 	})
 }

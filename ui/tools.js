@@ -6,7 +6,7 @@ import * as hotkeys from '../controls/hotkeys.js'
 import * as layers from '../layers.js'
 import * as settings from './settings.js'
 export let uiContainer;
-let uiGroup;
+export let uiGroup = {};
 
 
 // on changing to build mode, reset the tile to whatever was last picked, stored in this lastBuilt variable
@@ -26,7 +26,8 @@ export function init() {
 		destroy,
 		query;
 	
-	move = new Button({
+	uiGroup["move"] = new Button({
+		buttonName: "move",
 		iconTexture: "ui-move",
 		iconActiveTexture: "ui-move-active",
 		handleClick: function() {
@@ -35,7 +36,8 @@ export function init() {
 		hotkey: hotkeys.tools.move
 	})
 	
-	build = new Button({
+	uiGroup["build"] = new Button({
+		buttonName: "build",
 		iconTexture: "ui-build",
 		iconActiveTexture: "ui-build-active",
 		handleClick: function() {
@@ -43,15 +45,17 @@ export function init() {
 		},
 		hotkey: hotkeys.tools.build
 	})
-	plow = new Button({
+	uiGroup["plow"] = new Button({
+		buttonName: "plow",
 		iconTexture: "ui-plow",
 		iconActiveTexture: "ui-plow-active",
 		handleClick: function() {
-			tools.setTool({value: 'plow', tile: 'floor-plowed'});
+			tools.setTool({value: 'plow', tile: 'floor-plowed', mode: 'area'});
 		},
 		hotkey: hotkeys.tools.plow
 	})
-	seed = new Button({
+	uiGroup["seed"] = new Button({
+		buttonName: "seed",
 		iconTexture: "ui-seed",
 		iconActiveTexture: "ui-seed-active",
 		handleClick: function() {
@@ -59,7 +63,8 @@ export function init() {
 		},
 		hotkey: hotkeys.tools.seed
 	})
-	harvest = new Button({
+	uiGroup["harvest"] = new Button({
+		buttonName: "harvest",
 		iconTexture: "ui-harvest",
 		iconActiveTexture: "ui-harvest-active",
 		handleClick: function() {
@@ -67,7 +72,8 @@ export function init() {
 		},
 		hotkey: hotkeys.tools.harvest
 	})
-	destroy = new Button({
+	uiGroup["destroy"] = new Button({
+		buttonName: "destroy",
 		iconTexture: "ui-destroy",
 		iconActiveTexture: "ui-destroy-active",
 		handleClick: function() {
@@ -75,7 +81,8 @@ export function init() {
 		},
 		hotkey: hotkeys.tools.destroy
 	})
-	query = new Button({
+	uiGroup["query"] = new Button({
+		buttonName: "query",
 		iconTexture: "ui-query",
 		iconActiveTexture: "ui-query-active",
 		handleClick: function() {
@@ -83,11 +90,10 @@ export function init() {
 		},
 	})
 	
-	uiGroup = [move, build, plow, seed, harvest, destroy, query]
-	uiGroup.forEach((child, index) => {
-		uiContainer.addChild(child.button)
-		child.button.position.x = index*settings.buttonSize + settings.buttonSpacing*index
-		addInteraction(child);
+	Object.entries(uiGroup).forEach((child, index) => {
+		uiContainer.addChild(child[1].button)
+		child[1].button.position.x = index*settings.buttonSize + settings.buttonSpacing*index
+		addInteraction(child[1]);
 	})
 
 	app.stage.addChild(uiContainer);
@@ -95,8 +101,8 @@ export function init() {
 
 function addInteraction(child) {
 	function handleIcons() {
-		uiGroup.forEach(other => {
-			other.setDefaultIcon();
+		Object.entries(uiGroup).forEach(other => {
+			other[1].setDefaultIcon();
 		});
 		child.setActiveIcon();
 	}

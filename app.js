@@ -1,7 +1,7 @@
 import * as C from './constants.js'
 import * as loader from './loader.js';
 import * as game from './game.js'
-import * as map_controls from './controls/map.js'
+
 import * as tools from './controls/tools.js'
 window.setTool = tools.setTool
 let type = "WebGL"
@@ -33,5 +33,4 @@ loader.load();
 
 
 app.ticker.add(delta => game.loop(delta));
-map_controls.init()
 // initKeyboard();

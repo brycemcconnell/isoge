@@ -9,7 +9,7 @@ export function init() {
 		frames: 12,
 		maxStageReached: true,
 		perishable: false,
-		yielder: new Yielder({name: 'Fish', quantity: [1, 0]}),
+		yielder: [new Yielder({name: 'Fish', quantity: [1, 0]})],
 		animated: true
 	})
 } 

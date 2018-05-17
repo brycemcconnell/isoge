@@ -34,12 +34,13 @@ export default class Level {
 						            null;
 					}
 					testTile = new Tile({
-						tile: this.tileset[cell],
+						tile: Object.values(this.tileset)[cell],
 						x: j, 
 						y: i,
 						interactive: true,
 						water: false,
-						plant: plantType
+						plant: plantType,
+						type: Object.keys(this.tileset)[cell]
 					});
 					let colV = Math.max(0.7, Math.random());
 					if (Math.random() > .5 && testTile.plant) testTile.plant.sprite.tint =`0x${PIXI.utils.rgb2hex([colV, colV, colV]).toString(16)}`
@@ -48,13 +49,14 @@ export default class Level {
 						plantType = fish;
 					}
 					testTile = new Tile({
-						tile: this.tileset[cell],
+						tile: Object.values(this.tileset)[cell],
 						x: j, 
 						y: i,
 						interactive: true,
 						water: true,
 						plant: plantType,
 						animated: true,
+						type: "water"
 					});
 				}
 				
@@ -63,6 +65,7 @@ export default class Level {
 			})
 		})
 		this.updateCulling();
+		return true;
 	}
 
 	getTile(x, y) {

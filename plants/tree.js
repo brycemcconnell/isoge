@@ -9,10 +9,10 @@ export function getRandom() {
 	return new Plant_Config({
 		grows: false,
 		visible: true,
-		texture: new PIXI.Texture(PIXI.loader.resources[textureResource].texture),
+		texture: [new PIXI.Texture(PIXI.loader.resources[textureResource].texture)],
 		maxStageReached: true,
 		perishable: false,
 		tall: true,
-		yielder: new Yielder({name: 'Wood', quantity: [10, 1]})
+		yielder: [new Yielder({name: 'Wood', quantity: [10, 1]})]
 	})
 }

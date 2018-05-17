@@ -58,6 +58,8 @@ export function load() {
   .add("farm-seeds05", "assets/farm-seeds05.png")
   .add("farm-seeds06", "assets/farm-seeds06.png")
 
+  .add("pumpkin", "assets/plants/pumpkin.json")
+
   .add("floor-grass-rock1", "assets/floor-grass-rock1.png")
   .add("floor-grass-rock2", "assets/floor-grass-rock2.png")
   .add("floor-grass-rock3", "assets/floor-grass-rock3.png")

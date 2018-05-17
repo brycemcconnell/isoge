@@ -33,6 +33,8 @@ export function init() {
 	uiContainer.addChild(wall.button)
 	stone.button.position.x += settings.buttonSize
 	wall.button.position.x += settings.buttonSize*2
+	wall.icon.height = 64;
+	wall.icon.width = 32;
 
 	app.stage.addChild(uiContainer);
 	uiContainer.visible = false;

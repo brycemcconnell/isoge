@@ -1,4 +1,5 @@
 import * as settings from './settings.js'
+import * as C from '../constants.js'
 
 export default class Button {
 	constructor(config = {}) {
@@ -14,6 +15,11 @@ export default class Button {
 		this.icon = new PIXI.Sprite(this.iconTexture)
 		this.iconStatus = false;
 		this.button.addChild(this.icon)
+		let style = Object.assign({}, C.textStyle);
+		style.fill = 0x000000;
+		this.label = new PIXI.Text(config.buttonName || "n/a", style);
+		this.button.addChild(this.label);
+		this.label.visible = false;
 
 		this.button.buttonMode = true
 		this.button.interactive = true
@@ -23,10 +29,11 @@ export default class Button {
 	
 		// handle hover
 		this.button.on("mouseover", () => {
-			
+			this.label.visible = true;
 		})
 		this.button.on("mouseout", () => {
 			this.button.setTexture(this.upTexture)
+			this.label.visible = false;
 		})
 
 		this.button.on("mousedown", () => {

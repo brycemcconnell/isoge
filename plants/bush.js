@@ -5,9 +5,9 @@ export function init() {
 	bush = new Plant_Config({
 		grows: false,
 		visible: true,
-		texture: new PIXI.Texture(PIXI.loader.resources["bush01"].texture),
+		texture: [new PIXI.Texture(PIXI.loader.resources["bush01"].texture)],
 		maxStageReached: true,
 		perishable: false,
-		yielder: new Yielder({name: 'Seed', quantity: [1, 0]})
+		yielder: [new Yielder({name: 'Seed', quantity: [1, 0]})]
 	})
 } 

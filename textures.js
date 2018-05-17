@@ -16,6 +16,11 @@ let waterData = {
 	frames: 4,
 	sprite: "floor-water"
 }
+export let pumpkin;
+let pumpkinData = {
+	frames: 8,
+	sprite: "pumpkin"
+}
 
 let textures = [];
 export function init() {
@@ -41,4 +46,10 @@ export function init() {
 		textures.push(texture);
 	}
 	water = textures;
+	textures = [];
+	for (let i = 0; i < pumpkinData.frames; i++) {
+		let texture = PIXI.Texture.fromFrame(pumpkinData.sprite + `${i < 9 ? 0 : ''}` + (i + 1) + '.png');
+		textures.push(texture);
+	}
+	pumpkin = textures;
 }

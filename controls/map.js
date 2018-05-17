@@ -10,8 +10,14 @@ export let keys = {
 	s: false,
 	d: false
 }
+export let handleScenePan = function() {};
 export let scrollEnabled = true;
 export function init() {
+	handleScenePan = (x, y) => {
+		scene.position.x += x
+		scene.position.y += y
+		testLevel.level.updateCulling()
+	}
 	window.resetView = () => {
 		scene.position.x = 0;
 		scene.position.y = 0;
@@ -31,6 +37,8 @@ export function init() {
 	
 
 	window.addEventListener('mousemove', function(e) {
+		let mousePos = app.renderer.plugins.interaction.mouse.global
+		// console.log(mousePos)
 		if (mouseDown == true && tools.currentTool.value == 'move') {
 			handleScenePan(Math.round(e.movementX / 2), Math.round(e.movementY / 2));
 		}
@@ -70,14 +78,16 @@ function zoom(amnt, x, y) {
 	// @Important, this zoom is broken
 	scene.scale.x += amnt;
 	scene.scale.y += amnt;
+	console.log(Math.sign(amnt))
+	if (Math.sign(amnt) == 1) {
 
-	scene.position.x += C.CANVAS_SIZEX / scene.scale.x
-	scene.position.y += C.CANVAS_SIZEY / scene.scale.y
+	}
+	
 	
 }
 
-export function handleScenePan(x, y) {
-	scene.position.x += x
-	scene.position.y += y
-	testLevel.level.updateCulling()
-}
+// export function handleScenePan(x, y) {
+// 	scene.position.x += x
+// 	scene.position.y += y
+// 	testLevel.level.updateCulling()
+// }

@@ -8,6 +8,9 @@ import * as C from '../constants.js';
 import PopupText from '../ui/components/PopupText.js'
 import Plant from '../entities/Plant.js'
 
+import * as pumpkin from '../plants/pumpkin.js';
+import * as default_config from '../plants/default_config.js';
+
 let lastClicked = {x: -1, y: -1};
 let glowTiles = [];
 let glowTileContainer;
@@ -29,8 +32,11 @@ export class Tile {
 		this.popupText= null;
 		this.animated = config.animated || false;
 		this.tile = Array.isArray(config.tile) && !this.animated ? config.tile[C.random(config.tile.length - 1)] : config.tile;
+		this.defaultType = config.type;
+		this.type = config.type;
 		this.defaultTexture;
 		this.renderTile;
+		this.wall = config.wall || false;
 		this.textures = [];
 		if (this.animated) {
 			this.renderTile = new PIXI.extras.AnimatedSprite(this.tile);
@@ -45,10 +51,10 @@ export class Tile {
 			this.renderTile.parentGroup = config.layer || layers.floor;
 			// @Important - Perhaps set a height property that changes the anchor point, in order to have higher walls etc. (see the Plant and trees)
 			this.renderTile.anchor.set(0, -0.25);
+
 		}
 		this.renderTile.scale.set(1, 1);
 		this.renderTile.visible = config.visible || false;
-
 
 		this.glow = new PIXI.Sprite(glow.glowDefault);
 		this.glow.visible = false;
@@ -139,7 +145,6 @@ export class Tile {
 			// testLevel.level.getTile(this.x / 32, this.y / 32);
 			glowTiles = [this];
 			handleTileActivation();
-			console.log('asd')
 			if (tools.currentTool.value == 'query') {
 				handleTileQuery(this);
 			}
@@ -161,11 +166,14 @@ function handleBuild(tile) {
 	if (tile.plowed) {
 		tile.plowed = false;
 		tile.seeded = false;
-		tile.plant.reset();
 	}
 	tile.playerTile = true;
 	let newTile = new PIXI.Texture(PIXI.loader.resources[tools.currentTool.tile].texture);
+	if (tools.currentTool.tile == 'wall-x') {
+		tile.renderTile.anchor.set(0,0.375)
+	}
 	tile.renderTile.setTexture(newTile);
+	tile.type = tools.currentTool.tile;
 }
 
 function handleDestroy(tile) {
@@ -173,14 +181,16 @@ function handleDestroy(tile) {
 		tile.plowed = false;
 		tile.seeded = false;
 		tile.playerTile = false;
-		tile.plant.reset();
 		tile.renderTile.setTexture(tile.defaultTexture);
+		tile.type = tile.defaultTypel;
 	}
 }
 
 function handleSeed(tile) {
 	if (tile.plowed) {
-		tile.plant = new Plant(tile);
+		let plantConfig = default_config.config;
+		if (tools.currentTool.tile == 'pumpkin') plantConfig = pumpkin.config;
+		tile.plant = new Plant(tile, plantConfig);
 		tile.plant.seed()
 	}
 }
@@ -189,16 +199,29 @@ function handleSeed(tile) {
 function handleHarvest(tile) {
 	if (tile.seeded && tile.plant.maxStageReached) {
 		let yielder = tile.plant.yielder;
-		yielder.generateQuantity();
-		let text = `+ ${yielder.result} ${yielder.name}`;
-		if (yielder.result == 0) {
-			text = 'Nothing found!';
+		let nothingFound = 0;
+		tile.plant.yielder.forEach((yieldItem, index) => {
+			yieldItem.generateQuantity();
+			yieldItem.sendToInventory();
+			let text = `+ ${yieldItem.result} ${yieldItem.name}`;
+			if (yieldItem.result == 0) {
+				nothingFound += 1;
+			} else {
+				let popupText = new PopupText({text: text});
+				scene.addChild(popupText.content);
+				let pos = tile.renderTile.position;
+				popupText.content.position.set(pos.x, pos.y + (index * 32));
+				popupText.run();
+			}
+		})
+		if (nothingFound == tile.plant.yielder.length) {
+			let popupText = new PopupText({text: 'Nothing found!'});
+			scene.addChild(popupText.content);
+			let pos = tile.renderTile.position;
+			popupText.content.position.set(pos.x, pos.y);
+			popupText.run();
 		}
-		let popupText = new PopupText({text: text});
-		scene.addChild(popupText.content);
-		let pos = tile.renderTile.position;
-		popupText.content.position.set(pos.x, pos.y);
-		popupText.run();
+		
 		tile.plant.reset();
 	}
 }
@@ -206,6 +229,7 @@ function handleHarvest(tile) {
 function handlePlow(tile) {
 	tile.setPlowed(true)
 	let newTile = new PIXI.Texture(PIXI.loader.resources[tools.currentTool.tile].texture);
+	tile.type = tools.currentTool.tile;
 	tile.renderTile.setTexture(newTile);
 	tile.playerTile = true;
 }
@@ -213,7 +237,7 @@ function handlePlow(tile) {
 function allTilesClear(glowTiles) {
 	let result = true;
 	glowTiles.some(tile => {
-		if (tile.plowed || tile.seeded || tile.playerTile || tile.water) {
+		if ((tile.plowed || tile.seeded || tile.playerTile || tile.water) && tile.type !== tools.currentTool.tile) {
 			result = false;
 			return true;
 		}
@@ -222,7 +246,7 @@ function allTilesClear(glowTiles) {
 }
 
 function isTileClear(tile) {
-	if (tile.plowed || tile.seeded || tile.playerTile || tile.water) {
+	if ((tile.plowed || tile.seeded || tile.playerTile || tile.water) && tile.type !== tools.currentTool.tile) {
 		return false;
 	}
 	return true;

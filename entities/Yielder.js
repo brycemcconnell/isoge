@@ -9,8 +9,13 @@ export default class Yielder {
 		this.quantity = config.quantity || 1;
 		this.result = 0;
 	}
-	generateQuantity() {
-		this.result = C.random(this.quantity[0], this.quantity[1]);
+	generateQuantity(wiltedStatus) {
+		if (!wiltedStatus) {
+			this.result = C.random(this.quantity[0], this.quantity[1]);
+		} else {
+			this.result = Math.random() > .95 ? 1 : 0;
+		}
+		
 	}
 
 	sendToInventory() {

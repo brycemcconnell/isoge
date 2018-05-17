@@ -12,11 +12,11 @@ import * as moneyUI from './ui/money.js'
 import * as plantMenuUI from './ui/plantMenu.js'
 import * as ingameUI from './ui/ingame.js'
 import * as glow from './entities/glow.js' 
-import * as plant from './resources/plant.js'
-import * as default_config from './plants/default_config.js'
 import * as game from './game.js'
 import * as bush from './plants/bush.js'
 import * as pumpkin from './plants/pumpkin.js'
+import * as wheat from './plants/wheat.js'
+import * as defaultPlant from './plants/defaultPlant.js'
 import * as fish from './plants/fish.js'
 import * as berry_bush from './plants/berry_bush.js'
 import * as tree from './plants/tree.js'
@@ -35,7 +35,7 @@ export let background;
 export default function setup() {
 	document.getElementById('loaderInfo').innerHTML = 'Generating level';
 	document.fonts.load('10px "PixelMPlus10"').then(() => {
-		textures.init()
+		textures.init();
 		app.stage = new PIXI.display.Stage();
 		stretch('stretch-height');
 		app.stage.group.enableSort = true;
@@ -44,14 +44,15 @@ export default function setup() {
 		app.stage.addChild(background)
 		app.stage.addChild(scene)
 		// setTimeout(() => { scene.filterArea = scene.width}, 1500);
-	
 		bush.init();
 		pumpkin.init();
+		wheat.init();
+		defaultPlant.init();
 		fish.init();
+		berry_bush.init();
 
 
 		
-		berry_bush.init();
 		treeTextures.initTreeTextures();
 		toolsUI.init();
 		buildUI.init();
@@ -65,8 +66,6 @@ export default function setup() {
 		layers.init();
 		glow.initGlowTextures();
 		TileUtils.initGlowContainer();
-		plant.initPlantTextures();
-		default_config.init();
 		
 		setTimeout(() => {document.getElementById('loader').classList.add('hidden')}, 1000);
 		testLevel.createLevel();

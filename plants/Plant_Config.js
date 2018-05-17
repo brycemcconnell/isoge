@@ -11,6 +11,7 @@ export class Plant_Config {
 		this.maxStage = config.maxStage
 		this.maxStageReached = config.maxStageReached
 		this.wilt = config.wilt
+		this.perish = config.perish
 		this.perishable  = config.perishable
 		this.texture = config.texture
 		this.visible = config.visible

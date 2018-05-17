@@ -9,7 +9,8 @@ import PopupText from '../ui/components/PopupText.js'
 import Plant from '../entities/Plant.js'
 
 import * as pumpkin from '../plants/pumpkin.js';
-import * as default_config from '../plants/default_config.js';
+import * as defaultPlant from '../plants/defaultPlant.js';
+import * as wheat from '../plants/wheat.js';
 
 let lastClicked = {x: -1, y: -1};
 let glowTiles = [];
@@ -181,15 +182,19 @@ function handleDestroy(tile) {
 		tile.plowed = false;
 		tile.seeded = false;
 		tile.playerTile = false;
+		if (tile.plant) {
+			tile.plant.reset();
+		}
 		tile.renderTile.setTexture(tile.defaultTexture);
 		tile.type = tile.defaultTypel;
 	}
 }
 
 function handleSeed(tile) {
-	if (tile.plowed) {
-		let plantConfig = default_config.config;
+	if (tile.plowed && !tile.seeded) {
+		let plantConfig = defaultPlant.config;
 		if (tools.currentTool.tile == 'pumpkin') plantConfig = pumpkin.config;
+		if (tools.currentTool.tile == 'wheat') plantConfig = wheat.config;
 		tile.plant = new Plant(tile, plantConfig);
 		tile.plant.seed()
 	}
@@ -201,8 +206,9 @@ function handleHarvest(tile) {
 		let yielder = tile.plant.yielder;
 		let nothingFound = 0;
 		tile.plant.yielder.forEach((yieldItem, index) => {
-			yieldItem.generateQuantity();
+			yieldItem.generateQuantity(tile.plant.wilted);
 			yieldItem.sendToInventory();
+
 			let text = `+ ${yieldItem.result} ${yieldItem.name}`;
 			if (yieldItem.result == 0) {
 				nothingFound += 1;

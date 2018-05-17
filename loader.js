@@ -50,15 +50,9 @@ export function load() {
   .add("floor-dirt", "assets/floor-dirt.png")
   .add("floor-plowed", "assets/floor-plowed.png")
 
-  .add("farm-seeds00", "assets/farm-seeds00.png")
-  .add("farm-seeds01", "assets/farm-seeds01.png")
-  .add("farm-seeds02", "assets/farm-seeds02.png")
-  .add("farm-seeds03", "assets/farm-seeds03.png")
-  .add("farm-seeds04", "assets/farm-seeds04.png")
-  .add("farm-seeds05", "assets/farm-seeds05.png")
-  .add("farm-seeds06", "assets/farm-seeds06.png")
-
+  .add("defaultPlant", "assets/plants/defaultPlant.json")
   .add("pumpkin", "assets/plants/pumpkin.json")
+  .add("pumpkinwheat", "assets/plants/wheat.json")
 
   .add("floor-grass-rock1", "assets/floor-grass-rock1.png")
   .add("floor-grass-rock2", "assets/floor-grass-rock2.png")

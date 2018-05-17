@@ -15,26 +15,30 @@ export function init() {
 
 	let weed = new Button({
 		buttonName: "weed",
-		handleClick: function() {tools.setTool({tile: 'weed'}) }
+		handleClick: function() {tools.setTool({tile: 'defaultPlant'}); hide();}
 	})
 	
 	let pumpkin = new Button({
 		buttonName: "pumpkin",
-		handleClick: function() {tools.setTool({tile: 'pumpkin'}); }
+		handleClick: function() {tools.setTool({tile: 'pumpkin'}); hide(); }
 
 	})
 
 	let wheat = new Button({
 		buttonName: "wheat",
-		handleClick: function() {tools.setTool({tile: 'wheat'}) }
+		handleClick: function() {tools.setTool({tile: 'wheat'}); hide(); }
 	})
 
 	uiContainer.addChild(weed.button)
 	uiContainer.addChild(pumpkin.button)
 	uiContainer.addChild(wheat.button)
-	pumpkin.button.position.x += settings.buttonSize
-	wheat.button.position.x += settings.buttonSize*2
+	pumpkin.button.position.y -= settings.buttonSize
+	wheat.button.position.y -= settings.buttonSize*2
 
 	app.stage.addChild(uiContainer);
+	uiContainer.visible = false;
+}
+
+function hide() {
 	uiContainer.visible = false;
 }

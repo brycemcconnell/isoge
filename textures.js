@@ -21,6 +21,16 @@ let pumpkinData = {
 	frames: 8,
 	sprite: "pumpkin"
 }
+export let defaultPlant;
+let defaultPlantData = {
+	frames: 7,
+	sprite: "defaultPlant"
+}
+export let wheat;
+let wheatData = {
+	frames: 12,
+	sprite: "wheat"
+}
 
 let textures = [];
 export function init() {
@@ -52,4 +62,18 @@ export function init() {
 		textures.push(texture);
 	}
 	pumpkin = textures;
+
+	textures = [];
+	for (let i = 0; i < defaultPlantData.frames; i++) {
+		let texture = PIXI.Texture.fromFrame(defaultPlantData.sprite + `${i < 9 ? 0 : ''}` + (i + 1) + '.png');
+		textures.push(texture);
+	}
+	defaultPlant = textures;
+
+	textures = [];
+	for (let i = 0; i < wheatData.frames; i++) {
+		let texture = PIXI.Texture.fromFrame(wheatData.sprite + `${i < 9 ? 0 : ''}` + (i + 1) + '.png');
+		textures.push(texture);
+	}
+	wheat = textures;
 }

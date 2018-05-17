@@ -1,12 +1,12 @@
-import * as plantTextures from '../resources/plant.js'
 import * as C from '../constants.js';
 import {dateTime} from '../game/time.js'
 import Yielder from './Yielder.js';
-import * as default_config from '../plants/default_config.js';
+
 import * as pumpkin from '../plants/pumpkin.js';
+import * as defaultPlant from '../plants/defaultPlant.js';
 import * as layers from '../layers.js';
 export default class Plant {
-	constructor(tile, plant_config = default_config.config) {
+	constructor(tile, plant_config = defaultPlant.config) {
 		this.animated = plant_config.animated || false;
 		this.frames = plant_config.frames;
 		this.textures = plant_config.texture || [];
@@ -21,6 +21,8 @@ export default class Plant {
 		this.wilt = plant_config.wilt || 12; // hours after max stage reached
 		this.perish = plant_config.perish || 24; // hours after max stage reached
 
+		this.wilted = false;
+
 		this.growRate = Math.floor(this.growthHours / this.maxStage)
 
 		// These vars change dynamically
@@ -33,7 +35,7 @@ export default class Plant {
 		this.datePlanted;
 		this.harvestExpected;
 		if (!this.animated) {
-			this.sprite = new PIXI.Sprite(plant_config.texture[0] || plantTextures.textures[0]);
+			this.sprite = new PIXI.Sprite(plant_config.texture[0]);
 		} else {
 			for (let i = 0; i < this.frames; i++) {
 				let texture = PIXI.Texture.fromFrame(plant_config.animSprite + `${i < 9 ? 0 : ''}` + (i + 1) + '.png');
@@ -90,6 +92,7 @@ export default class Plant {
 		this.sprite.visible = false;
 		this.maxStageReached = false;
 		this.wiltSet = 0;
+		this.wilted = false;
 		this.perishSet = 0;
 		this.sprite.anchor.set(0, 0)
 	}
@@ -104,5 +107,6 @@ export default class Plant {
 
 	setWilted() {
 		this.sprite.tint = 0xc2aa88
+		this.wilted = true;
 	}
 }

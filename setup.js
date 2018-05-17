@@ -1,5 +1,5 @@
 import {app} from './app.js'
-import {testLevel} from './levels/testLevel.js'
+import * as testLevel from './levels/testLevel.js'
 
 import * as C from './constants.js'
 import * as toolsUI from './ui/tools.js'
@@ -15,10 +15,12 @@ import * as plant from './resources/plant.js'
 import * as default_config from './plants/default_config.js'
 import * as game from './game.js'
 import * as bush from './plants/bush.js'
+import * as fish from './plants/fish.js'
 import * as berry_bush from './plants/berry_bush.js'
 import * as tree from './plants/tree.js'
 import * as inventoryWindowInstance from './ui/inventoryWindowInstance.js'
 import * as treeTextures from './resources/tree.js';
+import * as textures from './textures.js';
 
 import * as TileUtils from './entities/Tile.js';
 
@@ -28,7 +30,7 @@ export let background;
 export default function setup() {
 	document.getElementById('loaderInfo').innerHTML = 'Generating level';
 	document.fonts.load('10px "PixelMPlus10"').then(() => {
-		
+		textures.init()
 		app.stage = new PIXI.display.Stage();
 		stretch('stretch-height');
 		app.stage.group.enableSort = true;
@@ -37,6 +39,9 @@ export default function setup() {
 		app.stage.addChild(background)
 		app.stage.addChild(scene)
 		bush.init();
+		fish.init();
+
+
 		
 		berry_bush.init();
 		treeTextures.initTreeTextures();
@@ -49,23 +54,27 @@ export default function setup() {
 		ingameUI.init();
 		inventoryWindowInstance.init();
 		layers.init();
-		glow.initGlowTextures()
+		glow.initGlowTextures();
 		TileUtils.initGlowContainer();
-		plant.initPlantTextures()
+		plant.initPlantTextures();
 		default_config.init();
 		
 		setTimeout(() => {document.getElementById('loader').classList.add('hidden')}, 1000);
-		testLevel.init();
-		
-		
+		testLevel.createLevel();
+		testLevel.level.init();
+
+		let userControls = PIXI.loader.resources["userControls"].data;
+		let defaultControls = PIXI.loader.resources["defaultControls"].data;
+
+		let sessionControls = {...defaultControls, ...userControls};
 
 		let axisX = new PIXI.Text('X Axis >', {fill: 0xffffff})
 		axisX.rotation = .6
-		axisX.position.y += 120
+		axisX.position.y -= 100
 		scene.addChild(axisX)
 		let axisY = new PIXI.Text('Y Axis >', {fill: 0xffffff})
 		axisY.rotation = -.6
-		axisY.position.y += 120
+		axisY.position.y -= 120
 		scene.addChild(axisY)
 
 		game.loop()

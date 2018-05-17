@@ -2,6 +2,9 @@ import setup from './setup.js';
 export function load() {
   PIXI.loader
 
+  .add("userControls", "assets/data/userControls.json")
+  .add("defaultControls", "assets/data/defaultControls.json")
+
   .add("bg-grass", "assets/bg-grass.png")
 
   .add("ui-move", "assets/ui-move.png")
@@ -18,6 +21,8 @@ export function load() {
   .add("ui-seed-active", "assets/ui-seed-active.png")
   .add("ui-inventory", "assets/ui-inventory.png")
   .add("ui-inventory-active", "assets/ui-inventory-active.png")
+  .add("ui-query", "assets/ui-query.png")
+  .add("ui-query-active", "assets/ui-query-active.png")
 
 
   .add("ui-close", "assets/ui-close.png")
@@ -38,6 +43,7 @@ export function load() {
   .add("tree00", "assets/tree00.png")
   .add("tree01", "assets/tree01.png")
   .add("tree02", "assets/tree02.png")
+  .add("fish", "assets/fish.json")
 
   .add("floor-grass", "assets/floor-grass.png")
   .add("floor-water", "assets/floor-water.json")

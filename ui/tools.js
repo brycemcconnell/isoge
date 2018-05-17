@@ -23,7 +23,8 @@ export function init() {
 		plow,
 		seed,
 		harvest,
-		destroy;
+		destroy,
+		query;
 	
 	move = new Button({
 		iconTexture: "ui-move",
@@ -74,8 +75,15 @@ export function init() {
 		},
 		hotkey: hotkeys.tools.destroy
 	})
+	query = new Button({
+		iconTexture: "ui-query",
+		iconActiveTexture: "ui-query-active",
+		handleClick: function() {
+			tools.setTool({value: 'query', mode: 'single'});
+		},
+	})
 	
-	uiGroup = [move, build, plow, seed, harvest, destroy]
+	uiGroup = [move, build, plow, seed, harvest, destroy, query]
 	uiGroup.forEach((child, index) => {
 		uiContainer.addChild(child.button)
 		child.button.position.x = index*settings.buttonSize + settings.buttonSpacing*index

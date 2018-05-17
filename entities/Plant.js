@@ -3,9 +3,12 @@ import * as C from '../constants.js';
 import {dateTime} from '../game/time.js'
 import Yielder from './Yielder.js';
 import * as default_config from '../plants/default_config.js';
-
+import * as layers from '../layers.js';
 export default class Plant {
 	constructor(tile, plant_config = default_config.config) {
+		this.animated = plant_config.animated || false;
+		this.frames = plant_config.frames;
+		this.textures = [];
 		this.tile = tile;
 		this.tall = plant_config.tall !== null ? plant_config.tall : false;
 		this.yielder = plant_config.yielder || new Yielder({name: 'No item', quantity: [0, 10]});
@@ -29,9 +32,25 @@ export default class Plant {
 		this.datePlanted;
 		this.harvestExpected;
 
-		this.sprite = new PIXI.Sprite(plant_config.texture || plantTextures.textures[0]);
+		if (!this.animated) {
+			this.sprite = new PIXI.Sprite(plant_config.texture || plantTextures.textures[0]);
+		} else {
+			for (let i = 0; i < this.frames; i++) {
+				let texture = PIXI.Texture.fromFrame(plant_config.animSprite + `${i < 9 ? 0 : ''}` + (i + 1) + '.png');
+				this.textures.push(texture);
+			}
+			this.sprite = new PIXI.extras.AnimatedSprite(this.textures);
+			this.sprite.animationSpeed = .2;
+			this.sprite.gotoAndPlay(C.random(this.frames));
+			this.sprite.onLoop = () => {
+				this.sprite.stop()
+				setTimeout(() => {
+					this.sprite.play();
+				}, C.random(3000, 1000))
+			}
+		}
 		this.sprite.visible = plant_config.visible || false;
-
+		this.sprite.parentGroup = layers.plants
 		if (this.tall) {
 			this.sprite.anchor.set(0, .5)
 		}

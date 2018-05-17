@@ -2,7 +2,7 @@ import {scene} from './../setup.js';
 import * as layers from './../layers.js';
 import * as tools from '../controls/tools.js';
 import {mouseDown} from '../controls/map.js';
-import {testLevel} from '../levels/testLevel.js';
+import * as testLevel from '../levels/testLevel.js';
 import * as glow from './glow.js';
 import * as C from '../constants.js';
 import PopupText from '../ui/components/PopupText.js'
@@ -28,24 +28,19 @@ export class Tile {
 		this.water = config.water || false;
 		this.popupText= null;
 		this.animated = config.animated || false;
-		this.tile = Array.isArray(config.tile) ? config.tile[C.random(config.tile.length - 1)] : config.tile;
-		
+		this.tile = Array.isArray(config.tile) && !this.animated ? config.tile[C.random(config.tile.length - 1)] : config.tile;
 		this.defaultTexture;
 		this.renderTile;
 		this.textures = [];
 		if (this.animated) {
-			for (let i = 0; i < config.frames; i++) {
-				let texture = PIXI.Texture.fromFrame(config.animSprite + '0' + (i + 1) + '.png');
-				this.textures.push(texture);
-			}
-			this.renderTile = new PIXI.extras.AnimatedSprite(this.textures);
-			this.renderTile.animationSpeed = .03;
+			this.renderTile = new PIXI.extras.AnimatedSprite(this.tile);
+			this.renderTile.animationSpeed = .05;
 			this.renderTile.play();
 			this.renderTile.parentGroup = config.layer || layers.water;
 		}
 		
 		if (!this.animated) {
-			this.defaultTexture = new PIXI.Texture(PIXI.loader.resources[this.tile].texture);
+			this.defaultTexture = this.tile;
 			this.renderTile = new PIXI.Sprite(this.defaultTexture);
 			this.renderTile.parentGroup = config.layer || layers.floor;
 			// @Important - Perhaps set a height property that changes the anchor point, in order to have higher walls etc. (see the Plant and trees)
@@ -79,7 +74,7 @@ export class Tile {
 			if (mouseDown) {
 				if (tools.currentTool.value !== 'move') {
 					glowTiles = [];
-					testLevel.tiles.forEach(row => {
+					testLevel.level.tiles.forEach(row => {
 						row.forEach(tile => tile.glow.visible = false);
 					});
 					let currentX = this.x / 32;
@@ -92,7 +87,7 @@ export class Tile {
 					if (tools.currentTool.mode == 'area') {
 						for (let i = 0; i <= Math.abs(diffY); i++) {
 							for (let j = 0; j <= Math.abs(diffX); j++) {
-								let loopTile = testLevel.tiles[signY * i + lastClicked.y][signX * j + lastClicked.x];
+								let loopTile = testLevel.level.tiles[signY * i + lastClicked.y][signX * j + lastClicked.x];
 								tilesToUpdate.push(loopTile);
 							}
 						}
@@ -100,12 +95,12 @@ export class Tile {
 					if (tools.currentTool.mode == 'line') {
 						let midpoint;
 						for (let i = 0; i <= Math.abs(diffY); i++) {
-							let loopTile = testLevel.tiles[signY * i + lastClicked.y][lastClicked.x];
+							let loopTile = testLevel.level.tiles[signY * i + lastClicked.y][lastClicked.x];
 							tilesToUpdate.push(loopTile);
 							if(i == Math.abs(diffY)) midpoint = signY * i;
 						}
 						for (let j = 0; j <= Math.abs(diffX); j++) {
-							let loopTile = testLevel.tiles[lastClicked.y +midpoint][signX * j + lastClicked.x];
+							let loopTile = testLevel.level.tiles[lastClicked.y +midpoint][signX * j + lastClicked.x];
 							tilesToUpdate.push(loopTile);
 						}
 					}
@@ -141,9 +136,13 @@ export class Tile {
 
 		});
 		this.renderTile.on('click', () => {
-			testLevel.getTile(this.x / 32, this.y / 32);
+			// testLevel.level.getTile(this.x / 32, this.y / 32);
 			glowTiles = [this];
 			handleTileActivation();
+			console.log('asd')
+			if (tools.currentTool.value == 'query') {
+				handleTileQuery(this);
+			}
 		});
 		this.renderTile.on('mouseup', () => {
 			handleTileActivation();
@@ -258,4 +257,8 @@ function handleTileActivation() {
 		tile.glow.tint = 0xffffff;
 	});
 	glowTiles = [];
+}
+
+function handleTileQuery(tile) {
+	console.log(tile)
 }

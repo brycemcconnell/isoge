@@ -1,5 +1,5 @@
 import {app} from '../app.js'
-import {testLevel} from '../levels/testLevel.js'
+import * as testLevel from '../levels/testLevel.js'
 import * as clockUI from '../ui/clock.js'
 import * as fpsUI from '../ui/fps.js'
 import * as C from '../constants.js'
@@ -17,7 +17,7 @@ export function handleTime() {
  		seconds += 1;
  		fpsUI.update();
  		if (seconds % hourRate == 0) {
- 			handleHourlyTick()
+ 			// handleHourlyTick()
  		}
  	}
  	timer += app.ticker.elapsedMS;
@@ -26,7 +26,7 @@ export function handleTime() {
 export function handleHourlyTick() {
 	sky = ((hour / 24) + .5);
 	let skyV = sky > 1 ? 1 - (sky - 1) : sky
-	testLevel.tiles.forEach((row, i) => {
+	testLevel.level.tiles.forEach((row, i) => {
 		row.forEach((cell, j) => {			
 			cell.renderTile.tint = `0x${PIXI.utils.rgb2hex([skyV, skyV, skyV]).toString(16)}`
 			if (cell.plant && cell.plant.grows) {

@@ -16,5 +16,8 @@ export class Plant_Config {
 		this.visible = config.visible
 		this.tall = config.tall
 		this.yielder = config.yielder
+		this.animated = config.animated
+		this.animSprite = config.animSprite
+		this.frames = config.frames
 	}
 }

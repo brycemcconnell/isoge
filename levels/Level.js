@@ -2,6 +2,7 @@ import {Tile} from '../entities/Tile.js'
 import AnimatedTile from '../entities/AnimatedTile.js'
 import * as C from '../constants.js'
 import {bush} from '../plants/bush.js'
+import {fish} from '../plants/fish.js'
 import {berry_bush} from '../plants/berry_bush.js'
 import * as tree from '../plants/tree.js'
 export default class Level {
@@ -37,22 +38,23 @@ export default class Level {
 						x: j, 
 						y: i,
 						interactive: true,
-						water: isWater,
+						water: false,
 						plant: plantType
 					});
 					let colV = Math.max(0.7, Math.random());
 					if (Math.random() > .5 && testTile.plant) testTile.plant.sprite.tint =`0x${PIXI.utils.rgb2hex([colV, colV, colV]).toString(16)}`
 				} else {
+					if (Math.random() > .9) {
+						plantType = fish;
+					}
 					testTile = new Tile({
 						tile: this.tileset[cell],
 						x: j, 
 						y: i,
 						interactive: true,
-						water: isWater,
+						water: true,
 						plant: plantType,
 						animated: true,
-						animSprite: "floor-water",
-						frames: 4
 					});
 				}
 				

@@ -1,32 +1,40 @@
 import Level from './Level.js'
 import * as layers from './../layers.js'
 import * as C from '../constants.js';
+import * as textures from '../textures.js'
 let grid = [];
-noise.seed(Math.random());
-for (let i = 0; i < 40; i++) {
-	grid[i] = [];
-	for (let j = 0; j < 40; j++) {
-		grid[i][j] = Math.random() > .9 ? 3 :
-					 Math.random() > .8 ? 2 : 1;
-		var value = noise.simplex2(i / 40, j / 40);
-		if (value > 0.5) {
-			grid[i][j] = 0;
+export let level;
+
+
+export function createLevel() {
+	noise.seed(Math.random());
+	for (let i = 0; i < 40; i++) {
+		grid[i] = [];
+		for (let j = 0; j < 40; j++) {
+			// grid[i][j] = 1
+			grid[i][j] = Math.random() > .9 ? 3 :
+						 Math.random() > .8 ? 2 : 1;
+			var value = noise.simplex2(i / 40, j / 40);
+			if (value > 0.5) {
+				grid[i][j] = 0;
+			}
 		}
 	}
+
+	level = new Level({
+		grid: grid,
+		tileset: [
+			textures.water,
+			textures.floorGrass,
+			textures.floorDirt,
+			[
+				textures.floorGrassRock1,
+				textures.floorGrassRock2,
+				textures.floorGrassRock3,
+				textures.floorGrassDirt1,
+				textures.floorGrassDirt2,
+				textures.floorGrassDirt3,
+			]
+		],
+	})
 }
-export const testLevel = new Level({
-	grid: grid,
-	tileset: [
-		"floor-water",
-		"floor-grass",
-		"floor-dirt",
-		[
-			"floor-grass-rock1",
-			"floor-grass-rock2",
-			"floor-grass-rock3",
-			"floor-grass-dirt1",
-			"floor-grass-dirt2",
-			"floor-grass-dirt3"
-		]
-	],
-})

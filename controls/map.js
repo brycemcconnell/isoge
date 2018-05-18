@@ -1,8 +1,7 @@
 import {app} from '../app.js'
-import {scene} from '../setup.js'
+import {scene, currentLevel} from '../setup.js'
 import * as C from '../constants.js'
 import * as tools from './tools.js'
-import * as testLevel from '../levels/testLevel.js'
 export let mouseDown = false;
 export let keys = {
 	w: false,
@@ -16,14 +15,14 @@ export function init() {
 	handleScenePan = (x, y) => {
 		scene.position.x += x
 		scene.position.y += y
-		testLevel.level.updateCulling()
+		currentLevel.level.updateCulling()
 	}
 	window.resetView = () => {
 		scene.position.x = 0;
 		scene.position.y = 0;
 		scene.scale.x = 1;
 		scene.scale.y = 1;
-		testLevel.level.updateCulling()
+		currentLevel.level.updateCulling()
 	}
 
 	window.addEventListener('mousedown', function(e) {
@@ -64,7 +63,7 @@ export function init() {
 			} else {
 				zoom(1, mousePos.x, mousePos.y)
 			}
-			testLevel.level.updateCulling()
+			currentLevel.level.updateCulling()
 		}
 	})
 
@@ -89,5 +88,5 @@ function zoom(amnt, x, y) {
 // export function handleScenePan(x, y) {
 // 	scene.position.x += x
 // 	scene.position.y += y
-// 	testLevel.level.updateCulling()
+// 	currentLevel.level.updateCulling()
 // }

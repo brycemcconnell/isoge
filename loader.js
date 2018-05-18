@@ -60,13 +60,19 @@ export function load() {
   .add("floor-grass-dirt1", "assets/floor-grass-dirt1.png")
   .add("floor-grass-dirt2", "assets/floor-grass-dirt2.png")
   .add("floor-grass-dirt3", "assets/floor-grass-dirt3.png")
-  .add("floor-wood", "assets/floor-wood.png")
+  .add("floor-wood", "assets/PlayerBuildings/wood.png")
   .add("floor-stone", "assets/floor-stone.png")
   .add("elevated-floor-wood", "assets/elevated-floor-wood.png")
   .add("wall-x", "assets/wall-x.png")
 
+  .add("water-edge-south", "assets/water-edge-south.json")
+  .add("water-edge-southeast", "assets/water-edge-southeast.json")
+  .add("water-edge-east", "assets/water-edge-east.json")
+
   .add("glow-white", "assets/glow-white.png")
   .add("glow-white-fill", "assets/glow-white-fill.png")
+
+  .add("cloud", "assets/cloud.png")
 
   .on("progress", loadProgressHandler)
   .load(setup)

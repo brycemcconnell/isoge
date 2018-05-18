@@ -5,6 +5,7 @@ import * as tools from '../controls/tools.js'
 import * as hotkeys from '../controls/hotkeys.js'
 import * as layers from '../layers.js'
 import * as settings from './settings.js'
+import * as queryPanelInstance from './queryPanelInstance.js'
 export let uiContainer;
 export let uiGroup = {};
 
@@ -87,6 +88,7 @@ export function init() {
 		iconActiveTexture: "ui-query-active",
 		handleClick: function() {
 			tools.setTool({value: 'query', mode: 'single'});
+			queryPanelInstance.handleToggle();
 		},
 	})
 	

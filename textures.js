@@ -11,10 +11,26 @@ export let floorGrassRock3;
 export let floorGrassDirt1;
 export let floorGrassDirt2;
 export let floorGrassDirt3;
+export let floorWood;
 export let water;
 let waterData = {
 	frames: 4,
 	sprite: "floor-water"
+}
+export let waterEdgeSouth;
+let waterEdgeSouthData = {
+	frames: 4,
+	sprite: "water-edge-south"
+}
+export let waterEdgeEast;
+let waterEdgeEastData = {
+	frames: 4,
+	sprite: "water-edge-east"
+}
+export let waterEdgeSouthEast;
+let waterEdgeSouthEastData = {
+	frames: 4,
+	sprite: "water-edge-southeast"
 }
 export let pumpkin;
 let pumpkinData = {
@@ -49,6 +65,7 @@ export function init() {
 	floorGrassDirt1 = new PIXI.Texture(PIXI.loader.resources["floor-grass-dirt1"].texture);
 	floorGrassDirt2 = new PIXI.Texture(PIXI.loader.resources["floor-grass-dirt2"].texture);
 	floorGrassDirt3 = new PIXI.Texture(PIXI.loader.resources["floor-grass-dirt3"].texture);
+	floorWood = new PIXI.Texture(PIXI.loader.resources["floor-wood"].texture);
 
 	textures = [];
 	for (let i = 0; i < waterData.frames; i++) {
@@ -76,4 +93,25 @@ export function init() {
 		textures.push(texture);
 	}
 	wheat = textures;
+
+	textures = [];
+	for (let i = 0; i < waterEdgeSouthData.frames; i++) {
+		let texture = PIXI.Texture.fromFrame(waterEdgeSouthData.sprite + `${i < 9 ? 0 : ''}` + (i + 1) + '.png');
+		textures.push(texture);
+	}
+	waterEdgeSouth = textures;
+
+	textures = [];
+	for (let i = 0; i < waterEdgeSouthEastData.frames; i++) {
+		let texture = PIXI.Texture.fromFrame(waterEdgeSouthEastData.sprite + `${i < 9 ? 0 : ''}` + (i + 1) + '.png');
+		textures.push(texture);
+	}
+	waterEdgeSouthEast = textures;
+
+	textures = [];
+	for (let i = 0; i < waterEdgeEastData.frames; i++) {
+		let texture = PIXI.Texture.fromFrame(waterEdgeEastData.sprite + `${i < 9 ? 0 : ''}` + (i + 1) + '.png');
+		textures.push(texture);
+	}
+	waterEdgeEast = textures;
 }

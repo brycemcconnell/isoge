@@ -6,9 +6,9 @@ import Button from './Button.js';
 export default class Window {
 	constructor(config = {}) {
 		let x = config.x || 0;
-		let y = config.x || 0;
-		this.width = config.x || 600;
-		this.height = config.x || 400;
+		let y = config.y || 0;
+		this.width = config.width || 600;
+		this.height = config.height || 400;
 		let posX = C.CANVAS_SIZEX/2 - this.width/2 + x
 		let posY = C.CANVAS_SIZEY/2 - this.height/2 + y
 		let color = "b5b5b5";

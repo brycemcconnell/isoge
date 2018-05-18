@@ -1,5 +1,7 @@
 import {app} from './app.js'
-import * as testLevel from './levels/testLevel.js'
+// import * as testLevel from './levels/testLevel.js'
+import * as circleLevel from './levels/circleLevel.js'
+// import * as floatingIslands from './levels/floatingIslands.js'
 
 import * as C from './constants.js'
 import * as toolsUI from './ui/tools.js'
@@ -11,6 +13,7 @@ import * as clockUI from './ui/clock.js'
 import * as moneyUI from './ui/money.js'
 import * as plantMenuUI from './ui/plantMenu.js'
 import * as ingameUI from './ui/ingame.js'
+import * as positionUI from './ui/position.js'
 import * as glow from './entities/glow.js' 
 import * as game from './game.js'
 import * as bush from './plants/bush.js'
@@ -21,30 +24,28 @@ import * as fish from './plants/fish.js'
 import * as berry_bush from './plants/berry_bush.js'
 import * as tree from './plants/tree.js'
 import * as inventoryWindowInstance from './ui/inventoryWindowInstance.js'
+import * as queryPanelInstance from './ui/queryPanelInstance.js'
 import * as treeTextures from './resources/tree.js';
 import * as textures from './textures.js';
 import * as map_controls from './controls/map.js'
 import * as sessionControls from './controls/sessionControls.js'
+import * as Cloud from './entities/Cloud.js'
 
 import {Actor} from './entities/Actor.js';
 
 import * as TileUtils from './entities/Tile.js';
 
-export let grass;
+export let currentLevel;
 export let scene;
-export let background;
+
 export default function setup() {
 	document.getElementById('loaderInfo').innerHTML = 'Generating level';
 	document.fonts.load('10px "PixelMPlus10"').then(() => {
 		textures.init();
 		app.stage = new PIXI.display.Stage();
-		stretch('stretch-height');
 		app.stage.group.enableSort = true;
-		background = new PIXI.Container();
 		scene = new PIXI.Container();
-		app.stage.addChild(background)
 		app.stage.addChild(scene)
-		// setTimeout(() => { scene.filterArea = scene.width}, 1500);
 		bush.init();
 		pumpkin.init();
 		wheat.init();
@@ -52,9 +53,11 @@ export default function setup() {
 		fish.init();
 		berry_bush.init();
 
+
 		// let bob = new Actor();
 		
 		treeTextures.initTreeTextures();
+
 		toolsUI.init();
 		buildUI.init();
 		plantMenuUI.init();
@@ -62,16 +65,22 @@ export default function setup() {
 		moneyUI.init();
 		fpsUI.init();
 		clockUI.init();
+		positionUI.init();
 		ingameUI.init();
+
 		inventoryWindowInstance.init();
+		queryPanelInstance.init();
+		
 		layers.init();
 		glow.initGlowTextures();
 		TileUtils.initGlowContainer();
 		
 		setTimeout(() => {document.getElementById('loader').classList.add('hidden')}, 1000);
-		testLevel.createLevel();
-		testLevel.level.init();
+		
 
+		circleLevel.createLevel();
+		circleLevel.level.init();
+		currentLevel = circleLevel;
 	
 
 		let axisX = new PIXI.Text('X Axis >', {fill: 0xffffff})
@@ -88,8 +97,11 @@ export default function setup() {
 		// Maybe add a option in menu to play with filters
 		let colorMatrix = new PIXI.filters.TiltShiftFilter();
 		app.stage.children[12].filters = [colorMatrix] // land
+		
 		app.stage.children[11].filters = [colorMatrix] // water
 		*/
-		game.loop()
+
+		Cloud.createSomeClouds();
+		app.ticker.add(delta => game.loop(delta));
 	})
 }

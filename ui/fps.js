@@ -1,5 +1,6 @@
 import * as C from '../constants.js';
 import {app} from '../app.js';
+
 export let container;
 let fpsText;
 export function init() {

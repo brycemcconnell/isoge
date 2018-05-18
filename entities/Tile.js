@@ -1,16 +1,18 @@
-import {scene} from './../setup.js';
+import {scene, currentLevel} from './../setup.js';
 import * as layers from './../layers.js';
 import * as tools from '../controls/tools.js';
 import {mouseDown} from '../controls/map.js';
-import * as testLevel from '../levels/testLevel.js';
 import * as glow from './glow.js';
 import * as C from '../constants.js';
-import PopupText from '../ui/components/PopupText.js'
-import Plant from '../entities/Plant.js'
+import PopupText from '../ui/components/PopupText.js';
+import Plant from '../entities/Plant.js';
+import {PlayerBuilding} from './PlayerBuilding.js';
 
 import * as pumpkin from '../plants/pumpkin.js';
 import * as defaultPlant from '../plants/defaultPlant.js';
 import * as wheat from '../plants/wheat.js';
+
+import * as textures from '../textures.js';
 
 let lastClicked = {x: -1, y: -1};
 let glowTiles = [];
@@ -26,8 +28,10 @@ export function initGlowContainer() {
 export class Tile {
 	constructor(config) {
 		this.scene = scene;
-		this.x = config.x * 32 || 0;
-		this.y = config.y * 32 || 0;
+		this.x = config.x || 0;
+		this.y = config.y || 0;
+		this.gridX = config.x * 32 || 0;
+		this.gridY = config.y * 32 || 0;
 		this.playerTile = false;
 		this.water = config.water || false;
 		this.popupText= null;
@@ -61,8 +65,8 @@ export class Tile {
 		this.glow.visible = false;
 		glowTileContainer.addChild(this.glow);
 
-		this.isoX = this.x - this.y;
-		this.isoY = (this.x + this.y) / 2;
+		this.isoX = this.gridX - this.gridY;
+		this.isoY = (this.gridX + this.gridY) / 2;
 
 		this.glow.position.x = this.isoX;
 		this.glow.position.y = this.isoY;
@@ -78,14 +82,22 @@ export class Tile {
 		this.scene.addChild(this.renderTile);
 		this.renderTile.on('mouseover', () => {
 			this.glow.visible = true;
+
+			let neighbors = this.getXNeighborSquare(4);
+			neighbors.forEach(neighbor => {
+				if (neighbor && neighbor.occupant && neighbor.occupant.tall) {
+					neighbor.occupant.sprite.alpha = .5;
+				}
+			});
+
 			if (mouseDown) {
 				if (tools.currentTool.value !== 'move') {
 					glowTiles = [];
-					testLevel.level.tiles.forEach(row => {
-						row.forEach(tile => tile.glow.visible = false);
+					currentLevel.level.tiles.forEach(row => {
+						row.forEach(tile => {if (tile) tile.glow.visible = false;});
 					});
-					let currentX = this.x / 32;
-					let currentY = this.y / 32;
+					let currentX = this.gridX / 32;
+					let currentY = this.gridY / 32;
 					let diffY = currentY - lastClicked.y;
 					let diffX = currentX - lastClicked.x;
 					let signX = Math.sign(diffX);
@@ -94,7 +106,7 @@ export class Tile {
 					if (tools.currentTool.mode == 'area') {
 						for (let i = 0; i <= Math.abs(diffY); i++) {
 							for (let j = 0; j <= Math.abs(diffX); j++) {
-								let loopTile = testLevel.level.tiles[signY * i + lastClicked.y][signX * j + lastClicked.x];
+								let loopTile = currentLevel.level.tiles[signY * i + lastClicked.y][signX * j + lastClicked.x];
 								tilesToUpdate.push(loopTile);
 							}
 						}
@@ -102,30 +114,32 @@ export class Tile {
 					if (tools.currentTool.mode == 'line') {
 						let midpoint;
 						for (let i = 0; i <= Math.abs(diffY); i++) {
-							let loopTile = testLevel.level.tiles[signY * i + lastClicked.y][lastClicked.x];
+							let loopTile = currentLevel.level.tiles[signY * i + lastClicked.y][lastClicked.x];
 							tilesToUpdate.push(loopTile);
 							if(i == Math.abs(diffY)) midpoint = signY * i;
 						}
 						for (let j = 0; j <= Math.abs(diffX); j++) {
-							let loopTile = testLevel.level.tiles[lastClicked.y +midpoint][signX * j + lastClicked.x];
+							let loopTile = currentLevel.level.tiles[lastClicked.y +midpoint][signX * j + lastClicked.x];
 							tilesToUpdate.push(loopTile);
 						}
 					}
 					let thereWasCollision = false;
 					tilesToUpdate.forEach(loopTile => {
-						loopTile.glow.setTexture(glow.glowFill);
-						if (tools.currentTool.value == 'destroy') {
-							loopTile.glow.tint = 0xff5500;
-						} else if (tools.currentTool.value =='seed') {
-							loopTile.glow.tint = 0xffff00;
-						} else {
-							loopTile.glow.tint = 0xffffff;
+						if (loopTile) {
+							loopTile.glow.setTexture(glow.glowFill);
+							if (tools.currentTool.value == 'destroy') {
+								loopTile.glow.tint = 0xff5500;
+							} else if (tools.currentTool.value =='seed') {
+								loopTile.glow.tint = 0xffff00;
+							} else {
+								loopTile.glow.tint = 0xffffff;
+							}
+							loopTile.glow.visible = true;
+							if (!isTileClear(loopTile)) {
+								thereWasCollision = true;
+							}
+							glowTiles.push(loopTile);
 						}
-						loopTile.glow.visible = true;
-						if (!isTileClear(loopTile)) {
-							thereWasCollision = true
-						}
-						glowTiles.push(loopTile)
 					});
 					if (thereWasCollision &&
 						(tools.currentTool.value == 'build' ||
@@ -136,14 +150,23 @@ export class Tile {
 			}
 		});
 		this.renderTile.on('mousedown', () => {
-			lastClicked = {x: this.x / 32, y: this.y / 32};
+			lastClicked = {x: this.gridX / 32, y: this.gridY / 32};
 		});
 		this.renderTile.on('mouseout', () => {
 			this.glow.visible = false;
 
+			let neighbors = this.getXNeighborSquare(4);
+			if (this.occupant) {
+				neighbors.push(this);	
+			}
+			neighbors.forEach(neighbor => {
+				if (neighbor && neighbor.occupant && neighbor.occupant.tall) {
+					neighbor.occupant.sprite.alpha = 1;
+				}
+			});
+
 		});
 		this.renderTile.on('click', () => {
-			// testLevel.level.getTile(this.x / 32, this.y / 32);
 			glowTiles = [this];
 			handleTileActivation();
 			if (tools.currentTool.value == 'query') {
@@ -155,11 +178,37 @@ export class Tile {
 		});
 		this.plowed = false;
 		this.seeded = config.plant ? true : false;
-		this.plant = config.plant ? new Plant(this, config.plant) : null;
+		this.occupant = config.plant ? new Plant(this, config.plant) : null;
 	}
 
 	setPlowed(boolean) {
 		this.plowed = boolean;
+	}
+
+	getNeighbors() {
+		return [
+			currentLevel.level.getTile(this.x + 1, this.y),
+			currentLevel.level.getTile(this.x - 1, this.y),
+			currentLevel.level.getTile(this.x, this.y + 1),
+			currentLevel.level.getTile(this.x, this.y - 1),
+		];
+	}
+
+	getXNeighborSquare(num) {
+		const checkX = this.x + 1;
+		const checkY = this.y + 1;
+		// Give x and y offsets for isometric visibility
+		const startX = checkX - num > 0 ? checkX - num : 0;
+		const startY = checkY - num > 0 ? checkY - num : 0;
+		const endX = checkX + num < currentLevel.level.tiles.length ? checkX + num : currentLevel.level.tiles.length;
+		const endY = checkY + num < currentLevel.level.tiles[0].length ? checkY + num : currentLevel.level.tiles[0].length;
+		const result = [];
+		for (let x = startX; x < endX; x++) {
+			for (let y = startY; y < endY; y++) {
+				result.push(currentLevel.level.getTile(x, y));
+			}
+		}
+		return result;
 	}
 }
 
@@ -169,12 +218,10 @@ function handleBuild(tile) {
 		tile.seeded = false;
 	}
 	tile.playerTile = true;
-	let newTile = new PIXI.Texture(PIXI.loader.resources[tools.currentTool.tile].texture);
-	if (tools.currentTool.tile == 'wall-x') {
-		tile.renderTile.anchor.set(0,0.375)
-	}
-	tile.renderTile.setTexture(newTile);
-	tile.type = tools.currentTool.tile;
+	tile.renderTile.setTexture(textures.floorDirt);
+	tile.type = "Dirt";
+
+	tile.occupant = new PlayerBuilding(tile);
 }
 
 function handleDestroy(tile) {
@@ -182,8 +229,8 @@ function handleDestroy(tile) {
 		tile.plowed = false;
 		tile.seeded = false;
 		tile.playerTile = false;
-		if (tile.plant) {
-			tile.plant.reset();
+		if (tile.occupant) {
+			tile.occupant.reset();
 		}
 		tile.renderTile.setTexture(tile.defaultTexture);
 		tile.type = tile.defaultTypel;
@@ -195,18 +242,18 @@ function handleSeed(tile) {
 		let plantConfig = defaultPlant.config;
 		if (tools.currentTool.tile == 'pumpkin') plantConfig = pumpkin.config;
 		if (tools.currentTool.tile == 'wheat') plantConfig = wheat.config;
-		tile.plant = new Plant(tile, plantConfig);
-		tile.plant.seed()
+		tile.occupant = new Plant(tile, plantConfig);
+		tile.occupant.seed();
 	}
 }
 
 
 function handleHarvest(tile) {
-	if (tile.seeded && tile.plant.maxStageReached) {
-		let yielder = tile.plant.yielder;
+	if (tile.seeded && tile.occupant.maxStageReached) {
+		let yielder = tile.occupant.yielder;
 		let nothingFound = 0;
-		tile.plant.yielder.forEach((yieldItem, index) => {
-			yieldItem.generateQuantity(tile.plant.wilted);
+		yielder.forEach((yieldItem, index) => {
+			yieldItem.generateQuantity(tile.occupant.wilted);
 			yieldItem.sendToInventory();
 
 			let text = `+ ${yieldItem.result} ${yieldItem.name}`;
@@ -219,8 +266,8 @@ function handleHarvest(tile) {
 				popupText.content.position.set(pos.x, pos.y + (index * 32));
 				popupText.run();
 			}
-		})
-		if (nothingFound == tile.plant.yielder.length) {
+		});
+		if (nothingFound == yielder.length) {
 			let popupText = new PopupText({text: 'Nothing found!'});
 			scene.addChild(popupText.content);
 			let pos = tile.renderTile.position;
@@ -228,12 +275,12 @@ function handleHarvest(tile) {
 			popupText.run();
 		}
 		
-		tile.plant.reset();
+		tile.occupant.reset();
 	}
 }
 
 function handlePlow(tile) {
-	tile.setPlowed(true)
+	tile.setPlowed(true);
 	let newTile = new PIXI.Texture(PIXI.loader.resources[tools.currentTool.tile].texture);
 	tile.type = tools.currentTool.tile;
 	tile.renderTile.setTexture(newTile);
@@ -290,5 +337,10 @@ function handleTileActivation() {
 }
 
 function handleTileQuery(tile) {
-	console.log(tile)
+	console.log(tile);
+	console.log(tile.x, tile.y, tile.type);
+	let east = currentLevel.level.getTile(tile.x + 1, tile.y);
+	let west = currentLevel.level.getTile(tile.x - 1, tile.y);
+	let south = currentLevel.level.getTile(tile.x, tile.y + 1);
+	let north = currentLevel.level.getTile(tile.x, tile.y - 1);
 }

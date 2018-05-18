@@ -1,6 +1,5 @@
 import {app} from '../app.js';
-import {scene} from '../setup.js'
-import * as testLevel from '../levels/testLevel.js';
+import {scene,currentLevel} from '../setup.js'
 import * as clockUI from '../ui/clock.js';
 import * as fpsUI from '../ui/fps.js';
 import * as C from '../constants.js';
@@ -8,9 +7,12 @@ import * as C from '../constants.js';
 export let timer = 0;
 export let seconds = 0;
 export let gameHour = 6;
+export let dayMinutes = 0;
+export let gameMinutes = 0;
+let minuteStep = 5;
 export let gameDay = 1;
 export let sky = 1;
-export let tickRate = 1; // how many seconds per hour
+export let tickRate = 1; // how many updates per second
 export let dateTime;
 
 export function handleTime() {
@@ -23,26 +25,41 @@ export function handleTime() {
 	}
 	timer += app.ticker.elapsedMS;
 }
-
+// The world should be 1 brightness from 8am to 5pm
 export function handleTick() {
-	sky = ((gameHour / 24) + .5);
-	let skyV = sky > 1 ? 1 - (sky - 1) : sky;
-	testLevel.level.tiles.forEach((row, i) => {
-		row.forEach((cell, j) => {			
-		cell.renderTile.tint = `0x${PIXI.utils.rgb2hex([skyV, skyV, skyV]).toString(16)}`;
-			if (cell.plant && cell.plant.grows) {
-				handlePlantLogic(cell.plant);
+	let skyV = 1;
+	// sky = ((dayMinutes / 1440) + .5);
+	// let skyV = sky > 1 ? 1 - (sky - 1) : sky;
+	currentLevel.level.tiles.forEach((row, i) => {
+		row.forEach((cell, j) => {
+			if (cell) {
+				cell.renderTile.tint = `0x${PIXI.utils.rgb2hex([skyV, skyV, skyV]).toString(16)}`;
+				if (cell.occupant && cell.occupant.grows) {
+					handlePlantLogic(cell.occupant);
+				}
 			}
 		});
 	});
-	if (gameHour < 23) {
-		gameHour += 1;
+	let newBG = PIXI.utils.hex2rgb(C.backgroundColor);
+	newBG = newBG.map(val => val * skyV);
+	app.renderer.backgroundColor = `0x${PIXI.utils.rgb2hex(newBG).toString(16)}`;
+	dayMinutes += minuteStep;
+	if (gameMinutes + minuteStep < 60) {
+		gameMinutes += minuteStep;
 	} else {
-		gameHour = 0;
-		gameDay += 1;
-		dateTime = {hour: gameHour, day: gameDay};
+		gameMinutes = 0;
+		if (gameHour < 23) {
+			gameHour += 1;
+		} else {
+			dayMinutes = 0;
+			gameHour = 0;
+			gameDay += 1;
+			dateTime = {hour: gameHour, day: gameDay};
+		}
 	}
-	clockUI.update(`Day ${gameDay}, ${gameHour}:00${gameHour < 12 ? 'am' : 'pm'} (☀${skyV.toFixed(2)})`);
+
+	let displayMinutes = gameMinutes.toString().length == 1 ? '0'+gameMinutes : gameMinutes;
+	clockUI.update(`Day ${gameDay}, ${gameHour}:${displayMinutes}${gameHour < 12 ? 'am' : 'pm'} (☀${skyV.toFixed(2)})`);
 }
 
 function handlePlantLogic(plant) {

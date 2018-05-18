@@ -8,12 +8,11 @@ export let level;
 
 export function createLevel() {
 	noise.seed(Math.random());
-	for (let i = 0; i < 40; i++) {
+	for (let i = 0; i < 100; i++) {
 		grid[i] = [];
-		for (let j = 0; j < 40; j++) {
-			// grid[i][j] = 1
+		for (let j = 0; j < 100; j++) {
 			grid[i][j] = Math.random() > .9 ? 4 :
-						 Math.random() > .8 ? 3 : 2;
+					 Math.random() > .8 ? 3 : 2;
 			var value = noise.simplex2(i / 40, j / 40);
 			if (value > 0.5) {
 				grid[i][j] = 1;
@@ -25,7 +24,7 @@ export function createLevel() {
 		grid: grid,
 		tileset: {
 			"null": null,
-			"water":textures.water,
+			"water": textures.water,
 			"grass":textures.floorGrass,
 			"dirt":textures.floorDirt,
 			"grassDoodad":[
@@ -38,4 +37,6 @@ export function createLevel() {
 			]
 		},
 	})
+
+	
 }

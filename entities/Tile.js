@@ -1,5 +1,4 @@
-import {scene, currentLevel} from './../setup.js';
-import * as layers from './../layers.js';
+import {scene, currentLevel, sceneHolder} from './../setup.js';
 import * as tools from '../controls/tools.js';
 import {mouseDown} from '../controls/map.js';
 import * as glow from './glow.js';
@@ -21,8 +20,7 @@ let glowTileContainer;
 export function initGlowContainer() {
 	glowTileContainer = new PIXI.Container();
 	glowTileContainer.visible = false;
-	scene.addChild(glowTileContainer);
-	glowTileContainer.parentGroup = layers.select;
+	sceneHolder.addChild(glowTileContainer);
 	glowTileContainer.visible = true;
 }
 export class Tile {
@@ -47,13 +45,11 @@ export class Tile {
 			this.renderTile = new PIXI.extras.AnimatedSprite(this.tile);
 			this.renderTile.animationSpeed = .05;
 			this.renderTile.play();
-			this.renderTile.parentGroup = config.layer || layers.water;
 		}
 		
 		if (!this.animated) {
 			this.defaultTexture = this.tile;
 			this.renderTile = new PIXI.Sprite(this.defaultTexture);
-			this.renderTile.parentGroup = config.layer || layers.floor;
 			// @Important - Perhaps set a height property that changes the anchor point, in order to have higher walls etc. (see the Plant and trees)
 			this.renderTile.anchor.set(0, -0.25);
 
@@ -221,9 +217,23 @@ function handleBuild(tile) {
 	}
 	tile.playerTile = true;
 	tile.renderTile.setTexture(textures.floorDirt);
-	tile.type = "Dirt";
+	let west = currentLevel.level.getTile(tile.x - 1, tile.y);
+	let north = currentLevel.level.getTile(tile.x, tile.y - 1);
+	let northWest = currentLevel.level.getTile(tile.x - 1, tile.y - 1);
+	[west, north, northWest].forEach(tile => {
+		tile.playerTile = true;
+		tile.renderTile.setTexture(textures.floorDirt);
+	});
+	tile.occupant = new PlayerBuilding(tile, buildingConfig[tools.currentTool.tile]);
+}
 
-	tile.occupant = new PlayerBuilding(tile);
+const buildingConfig = {
+	"floor-wood": {
+		textures: "floorWood"
+	},
+	"plot2x2": {
+		textures: "plot2x2"
+	},
 }
 
 function handleDestroy(tile) {

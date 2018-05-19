@@ -103,7 +103,7 @@ export default class Level {
 				}
 			});
 		});
-		this.generateCrystal();
+		// this.generateCrystal();
 		this.updateCulling();
 		return true;
 	}
@@ -113,11 +113,15 @@ export default class Level {
 	}
 
 	updateCulling() {
+		let cullNegX = -256 //+ 256;
+		let cullNegY = -256  //+ 256;
+		let cullX = C.CANVAS_SIZEX //- 64;
+		let cullY = C.CANVAS_SIZEY - 32 //- 64;
 		this.tiles.forEach((row, i) => {
 			row.forEach((cell, j) => {
 				if (cell) {
 					let pos = cell.renderTile.toGlobal(new PIXI.Point(0, 0))
-					if (pos.x < -256 || pos.y < -256 || pos.x > C.CANVAS_SIZEX || pos.y > C.CANVAS_SIZEY -32) {
+					if (pos.x < cullNegX || pos.y < cullNegY || pos.x > cullX || pos.y > cullY) {
 						cell.renderTile.visible = false
 					} else {
 						cell.renderTile.visible = true

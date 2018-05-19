@@ -3,10 +3,11 @@ export class PlayerBuilding {
 	constructor(tile, data) {
 		this.parent = tile;
 		this.pixiParent = tile.renderTile;
-		this.sprite = new PIXI.Sprite(textures.floorWood);
-		this.sprite.position.y = 10;
+		this.sprite = new PIXI.Sprite(textures[data.textures]);
+		// this.sprite.position.y = 10;
+		this.sprite.anchor.set(.25, .5)
 		this.pixiParent.addChild(this.sprite);
-		console.log('created')
+		console.log(this)
 	}
 
 	reset() {

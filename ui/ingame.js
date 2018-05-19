@@ -8,7 +8,6 @@ import * as C from '../constants.js'
 import Button from './Button.js'
 import * as hotkeys from '../controls/hotkeys.js'
 import * as inventoryWindowInstance from './inventoryWindowInstance.js'
-import * as layers from '../layers.js'
 import * as settings from './settings.js'
 export let uiContainer;
 let uiGroup;
@@ -20,7 +19,6 @@ export function init() {
 	uiContainer.position.x = settings.uiOffset;
 	uiContainer.position.y = settings.uiOffset;
 	uiGroup = [];
-	uiContainer.parentGroup = layers.ui;
 	uiGroup.push(inventory = new Button({
 		handleClick: function() {
 			resetView();

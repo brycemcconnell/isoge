@@ -1,13 +1,11 @@
 import * as C from '../../constants.js';
 import * as animationHandler from '../../game/animationHandler.js'
-import * as layers from '../../layers.js';
 export default class PopupText {
 	constructor(config = {}) {
 		this.style = config.style || C.textStyle;
 		this.text = config.text || '+ 1 gold';
 		this.content = new PIXI.Text(this.text, this.style);
 		this.content.visible = false;
-		this.content.parentGroup = layers.ui;
 		this.animationRunning = false;
 		this.counter = 0;
 		this.delay = config.delay || 0;

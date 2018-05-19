@@ -2,7 +2,6 @@ import * as C from '../constants.js';
 import {dateTime} from '../game/time.js';
 import Yielder from './Yielder.js';
 import * as defaultPlant from '../plants/defaultPlant.js';
-import * as layers from '../layers.js';
 
 export default class Plant {
 	constructor(tile, plant_config = defaultPlant.config) {
@@ -49,8 +48,6 @@ export default class Plant {
 					this.sprite.play();
 				}, C.random(3000, 1000));
 			};
-			// Put fish on the same layer as floor tiles/trees, so that they render in order of tile (eg from top of screen to the bottom)
-			this.sprite.parentGroup = layers.floor;
 		}
 		this.sprite.visible = plant_config.visible || false;
 		

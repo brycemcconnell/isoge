@@ -1,5 +1,4 @@
 import * as C from '../constants.js';
-import * as layers from '../layers.js';
 import Button from './Button.js';
 
 
@@ -15,7 +14,6 @@ export default class Window {
 		this.borderWidth = 4;
 		this.padding = 8;
 		this.container = new PIXI.Container();
-		this.container.parentGroup = layers.ui;
 		this.container.position.set(posX, posY)
 
 

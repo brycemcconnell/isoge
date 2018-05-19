@@ -53,6 +53,8 @@ let crystalData = {
 	sprite: "crystal"
 }
 
+export let plot2x2;
+
 let textures = [];
 export function init() {
 	textures = [];
@@ -71,6 +73,7 @@ export function init() {
 	floorGrassDirt2 = new PIXI.Texture(PIXI.loader.resources["floor-grass-dirt2"].texture);
 	floorGrassDirt3 = new PIXI.Texture(PIXI.loader.resources["floor-grass-dirt3"].texture);
 	floorWood = new PIXI.Texture(PIXI.loader.resources["floor-wood"].texture);
+	plot2x2 = new PIXI.Texture(PIXI.loader.resources["plot2x2"].texture);
 
 	textures = [];
 	for (let i = 0; i < waterData.frames; i++) {

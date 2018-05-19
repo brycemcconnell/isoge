@@ -1,6 +1,5 @@
 import Button from './Button.js';
 import * as C from '../constants.js';
-import * as layers from '../layers.js';
 export default class ItemButton extends Button {
 	constructor(config) {
 		super(config);
@@ -16,7 +15,6 @@ export default class ItemButton extends Button {
 		description.drawRect(4, 4, 200 - 8, 300 - 8);
 		// this.button.addChild(description);
 		description.visible = false;
-		description.parentGroup = layers.tooltips;
 
 		let title = new PIXI.Text('Title', C.textStyle);
 		title.position.x = 32;

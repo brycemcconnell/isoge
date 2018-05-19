@@ -3,7 +3,6 @@ import * as C from '../constants.js'
 import Button from './Button.js'
 import * as tools from '../controls/tools.js'
 import * as hotkeys from '../controls/hotkeys.js'
-import * as layers from '../layers.js'
 import * as settings from './settings.js'
 import * as queryPanelInstance from './queryPanelInstance.js'
 export let uiContainer;
@@ -18,7 +17,6 @@ export function init() {
 	uiContainer = new PIXI.Container();
 	uiContainer.position.y = C.CANVAS_SIZEY - settings.buttonSize - settings.uiOffset;
 	uiContainer.position.x = settings.uiOffset;
-	uiContainer.parentGroup = layers.ui;
 	let move,
 		build,
 		plow,

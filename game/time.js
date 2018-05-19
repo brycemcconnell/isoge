@@ -1,5 +1,5 @@
 import {app} from '../app.js';
-import {scene,currentLevel} from '../setup.js'
+import {currentLevel, scene} from '../setup.js'
 import * as clockUI from '../ui/clock.js';
 import * as fpsUI from '../ui/fps.js';
 import * as C from '../constants.js';
@@ -9,7 +9,7 @@ export let seconds = 0;
 export let gameHour = 6;
 export let dayMinutes = 0;
 export let gameMinutes = 0;
-let minuteStep = 5;
+let minuteStep = 30;
 export let gameDay = 1;
 export let sky = 1;
 export let tickRate = 1; // how many updates per second
@@ -27,6 +27,9 @@ export function handleTime() {
 }
 // The world should be 1 brightness from 8am to 5pm
 export function handleTick() {
+	// let colorMatrix = new PIXI.filters.ColorMatrixFilter();
+	// colorMatrix.brightness(gameHour/24);
+	// scene.filters = [colorMatrix] 
 	let skyV = 1;
 	// sky = ((dayMinutes / 1440) + .5);
 	// let skyV = sky > 1 ? 1 - (sky - 1) : sky;

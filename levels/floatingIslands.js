@@ -1,5 +1,4 @@
 import Level from './Level.js'
-import * as layers from './../layers.js'
 import * as C from '../constants.js';
 import * as textures from '../textures.js'
 let grid = [];

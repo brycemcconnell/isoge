@@ -1,11 +1,10 @@
 import {app} from './app.js'
-import * as testLevel from './levels/testLevel.js'
-// import * as circleLevel from './levels/circleLevel.js'
+// import * as testLevel from './levels/testLevel.js'
+import * as circleLevel from './levels/circleLevel.js'
 // import * as floatingIslands from './levels/floatingIslands.js'
 
 import * as C from './constants.js'
 import * as toolsUI from './ui/tools.js'
-import * as layers from './layers.js'
 import * as buildUI from './ui/build.js'
 import * as destroyUI from './ui/destroy.js'
 import * as fpsUI from './ui/fps.js'
@@ -38,15 +37,17 @@ import PopupText from './ui/components/PopupText.js';
 
 export let currentLevel;
 export let scene;
-
+export let sceneHolder;
 export default function setup() {
 	document.getElementById('loaderInfo').innerHTML = 'Generating level';
 	document.fonts.load('10px "PixelMPlus10"').then(() => {
 		textures.init();
-		app.stage = new PIXI.display.Stage();
-		app.stage.group.enableSort = true;
+		sceneHolder = new PIXI.Container();
 		scene = new PIXI.Container();
-		app.stage.addChild(scene)
+		sceneHolder.addChild(scene);
+// water
+		TileUtils.initGlowContainer();
+		app.stage.addChild(sceneHolder)
 		bush.init();
 		pumpkin.init();
 		wheat.init();
@@ -55,7 +56,7 @@ export default function setup() {
 		berry_bush.init();
 
 
-		// let bob = new Actor();
+		let bob = new Actor();
 		
 		treeTextures.initTreeTextures();
 
@@ -72,16 +73,15 @@ export default function setup() {
 		inventoryWindowInstance.init();
 		queryPanelInstance.init();
 
-		layers.init();
 		glow.initGlowTextures();
-		TileUtils.initGlowContainer();
+		
 		
 		setTimeout(() => {document.getElementById('loader').classList.add('hidden')}, 1000);
 		
 
-		testLevel.createLevel();
-		testLevel.level.init();
-		currentLevel = testLevel;
+		circleLevel.createLevel();
+		circleLevel.level.init();
+		currentLevel = circleLevel;
 	
 
 		let axisX = new PIXI.Text('X Axis >', {fill: 0xffffff})

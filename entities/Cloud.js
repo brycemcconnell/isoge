@@ -1,14 +1,12 @@
 import {scene} from '../setup.js';
 import * as C from '../constants.js';
-import * as layers from '../layers.js';
-import * as animationHandler from '../../game/animationHandler.js'
+import * as animationHandler from '../game/animationHandler.js'
 
 export let clouds = [];
 
 export class Cloud {
 	constructor() {
 		this.sprite = new PIXI.Sprite(PIXI.loader.resources["cloud"].texture);
-		this.sprite.parentGroup = layers.clouds;
 		
 		this.sprite.alpha = 0.8;
 		this.velX = 1;

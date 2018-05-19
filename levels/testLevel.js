@@ -11,7 +11,7 @@ export function createLevel() {
 		grid[i] = [];
 		for (let j = 0; j < 40; j++) {
 			// grid[i][j] = 1
-			grid[i][j] = Math.random() > .9 ? 4 :
+			grid[i][j] = Math.random() > .9 ? C.random(4, 9) :
 						 Math.random() > .8 ? 3 : 2;
 			var value = noise.simplex2(i / 40, j / 40);
 			if (value > 0.5) {
@@ -27,14 +27,12 @@ export function createLevel() {
 			"water":textures.water,
 			"grass":textures.floorGrass,
 			"dirt":textures.floorDirt,
-			"grassDoodad":[
-				textures.floorGrassRock1,
-				textures.floorGrassRock2,
-				textures.floorGrassRock3,
-				textures.floorGrassDirt1,
-				textures.floorGrassDirt2,
-				textures.floorGrassDirt3,
-			]
+			"grassRock1": textures.floorGrassRock1,
+			"grassRock2": textures.floorGrassRock2,
+			"grassRock3": textures.floorGrassRock3,
+			"grassDirt1": textures.floorGrassDirt1,
+			"grassDirt2": textures.floorGrassDirt2,
+			"grassDirt3": textures.floorGrassDirt3,
 		},
 	})
 }

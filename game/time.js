@@ -20,7 +20,7 @@ export function handleTime() {
 		seconds += 1;
 		fpsUI.update();
 		if (seconds % tickRate == 0) {
-			handleTick();
+			// handleTick();
 		}
 	}
 	timer += app.ticker.elapsedMS;

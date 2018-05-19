@@ -24,7 +24,6 @@ import * as berry_bush from './plants/berry_bush.js'
 import * as tree from './plants/tree.js'
 import * as inventoryWindowInstance from './ui/inventoryWindowInstance.js'
 import * as queryPanelInstance from './ui/queryPanelInstance.js'
-import * as treeTextures from './resources/tree.js';
 import * as textures from './textures.js';
 import * as map_controls from './controls/map.js'
 import * as sessionControls from './controls/sessionControls.js'
@@ -41,24 +40,27 @@ export let sceneHolder;
 export default function setup() {
 	document.getElementById('loaderInfo').innerHTML = 'Generating level';
 	document.fonts.load('10px "PixelMPlus10"').then(() => {
+
 		textures.init();
-		sceneHolder = new PIXI.Container();
-		scene = new PIXI.Container();
-		sceneHolder.addChild(scene);
-// water
-		TileUtils.initGlowContainer();
-		app.stage.addChild(sceneHolder)
+
 		bush.init();
 		pumpkin.init();
 		wheat.init();
 		defaultPlant.init();
 		fish.init();
 		berry_bush.init();
-
-
-		let bob = new Actor();
 		
-		treeTextures.initTreeTextures();
+		sceneHolder = new PIXI.Container();
+		scene = new PIXI.Container();
+		sceneHolder.addChild(scene);
+// water
+		TileUtils.initGlowContainer();
+		app.stage.addChild(sceneHolder)
+		
+
+
+		// let bob = new Actor();
+		
 
 		toolsUI.init();
 		buildUI.init();
@@ -81,6 +83,7 @@ export default function setup() {
 
 		circleLevel.createLevel();
 		circleLevel.level.init();
+		circleLevel.level.render();
 		currentLevel = circleLevel;
 	
 

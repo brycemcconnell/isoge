@@ -4,11 +4,10 @@ import Yielder from './Yielder.js';
 import * as defaultPlant from '../plants/defaultPlant.js';
 
 export default class Plant {
-	constructor(tile, plant_config = defaultPlant.config) {
+	constructor(plant_config = defaultPlant.config) {
 		this.animated = plant_config.animated || false;
-		this.frames = plant_config.frames;
-		this.textures = plant_config.texture || [];
-		this.tile = tile;
+		// this.frames = plant_config.frames;
+		this.textures = plant_config.textures || [];
 		this.tall = plant_config.tall !== null ? plant_config.tall : false;
 		this.yielder = plant_config.yielder || [new Yielder({name: 'No item', quantity: [0, 10]})];
 		this.grows = plant_config.grows !== null ? plant_config.grows :  true;
@@ -32,31 +31,6 @@ export default class Plant {
 
 		this.datePlanted;
 		this.harvestExpected;
-		if (!this.animated) {
-			this.sprite = new PIXI.Sprite(plant_config.texture[0]);
-		} else {
-			for (let i = 0; i < this.frames; i++) {
-				let texture = PIXI.Texture.fromFrame(plant_config.animSprite + `${i < 9 ? 0 : ''}` + (i + 1) + '.png');
-				this.textures.push(texture);
-			}
-			this.sprite = new PIXI.extras.AnimatedSprite(this.textures);
-			this.sprite.animationSpeed = .2;
-			this.sprite.gotoAndPlay(C.random(this.frames));
-			this.sprite.onLoop = () => {
-				this.sprite.stop();
-				setTimeout(() => {
-					this.sprite.play();
-				}, C.random(3000, 1000));
-			};
-		}
-		this.sprite.visible = plant_config.visible || false;
-		
-		if (this.tall) {
-			this.sprite.anchor.set(0, .5);
-		}
-		
-
-		this.tile.renderTile.addChild(this.sprite);
 	}
 
 	seed() {

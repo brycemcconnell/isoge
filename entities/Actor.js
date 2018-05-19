@@ -8,7 +8,7 @@ export class Actor {
 		this.velX = 0.1;
 		this.velY = 0.1;
 		allActors.push(this);
-		scene.addChild(this.sprite);
+		// scene.addChild(this.sprite);
 	}
 
 	update() {

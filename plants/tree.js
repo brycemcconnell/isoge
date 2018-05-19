@@ -1,15 +1,13 @@
 import {Plant_Config} from './Plant_Config.js'
-import * as treeTextures from '../resources/tree.js';
 import Yielder from '../entities/Yielder.js';
 import * as C from '../constants.js';
-
+import * as textures from '../textures.js';
+console.log(C);
 export function getRandom() {
-	let textureResource = treeTextures.textures[C.random(treeTextures.textures.length - 1)];
-
 	return new Plant_Config({
 		grows: false,
 		visible: true,
-		texture: [new PIXI.Texture(PIXI.loader.resources[textureResource].texture)],
+		textures: [textures.tree00, textures.tree01, textures.tree02][C.random(2)],
 		maxStageReached: true,
 		perishable: false,
 		tall: true,

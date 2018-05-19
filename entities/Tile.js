@@ -34,6 +34,7 @@ export class Tile {
 		this.water = config.water || false;
 		this.popupText= null;
 		this.animated = config.animated || false;
+		this.animationSpeed = config.animationSpeed || .1;
 		this.tile = Array.isArray(config.tile) && !this.animated ? config.tile[C.random(config.tile.length - 1)] : config.tile;
 		this.defaultType = config.type;
 		this.type = config.type;
@@ -41,142 +42,13 @@ export class Tile {
 		this.renderTile;
 		this.wall = config.wall || false;
 		this.textures = [];
-		if (this.animated) {
-			this.renderTile = new PIXI.extras.AnimatedSprite(this.tile);
-			this.renderTile.animationSpeed = .05;
-			this.renderTile.play();
-		}
-		
-		if (!this.animated) {
-			this.defaultTexture = this.tile;
-			this.renderTile = new PIXI.Sprite(this.defaultTexture);
-			// @Important - Perhaps set a height property that changes the anchor point, in order to have higher walls etc. (see the Plant and trees)
-			this.renderTile.anchor.set(0, -0.25);
-
-		}
-		this.renderTile.scale.set(1, 1);
-		this.renderTile.visible = config.visible || false;
-
-		this.glow = new PIXI.Sprite(glow.glowDefault);
-		this.glow.visible = false;
-		glowTileContainer.addChild(this.glow);
 
 		this.isoX = this.gridX - this.gridY;
 		this.isoY = (this.gridX + this.gridY) / 2;
-
-		this.glow.position.x = this.isoX;
-		this.glow.position.y = this.isoY;
 		
-		this.renderTile.interactive = config.interactive || false;
-		this.renderTile.hitArea = new PIXI.Polygon([
-			32, 32,
-			64, 48,
-			32, 64,
-			0, 48
-		]);
-		this.renderTile.position.set(this.isoX, this.isoY);
-		this.scene.addChild(this.renderTile);
-		this.renderTile.on('mouseover', () => {
-
-			this.glow.visible = true;
-
-			let neighbors = this.getXNeighborSquare(4);
-			neighbors.forEach(neighbor => {
-				if (neighbor && neighbor.occupant && neighbor.occupant.tall) {
-					neighbor.occupant.sprite.alpha = .5;
-				}
-			});
-
-			if (mouseDown) {
-				if (tools.currentTool.value !== 'move') {
-					
-					let currentX = this.gridX / 32;
-					let currentY = this.gridY / 32;
-					let diffY = currentY - lastClicked.y;
-					let diffX = currentX - lastClicked.x;
-					let signX = Math.sign(diffX);
-					let signY = Math.sign(diffY);
-					let tilesToUpdate = [];
-					if (tools.currentTool.mode == 'area') {
-						for (let i = 0; i <= Math.abs(diffY); i++) {
-							for (let j = 0; j <= Math.abs(diffX); j++) {
-								let loopTile = currentLevel.level.tiles[signY * i + lastClicked.y][signX * j + lastClicked.x];
-								tilesToUpdate.push(loopTile);
-							}
-						}
-					}
-					if (tools.currentTool.mode == 'line') {
-						let midpoint;
-						for (let i = 0; i <= Math.abs(diffY); i++) {
-							let loopTile = currentLevel.level.tiles[signY * i + lastClicked.y][lastClicked.x];
-							tilesToUpdate.push(loopTile);
-							if(i == Math.abs(diffY)) midpoint = signY * i;
-						}
-						for (let j = 0; j <= Math.abs(diffX); j++) {
-							let loopTile = currentLevel.level.tiles[lastClicked.y +midpoint][signX * j + lastClicked.x];
-							tilesToUpdate.push(loopTile);
-						}
-					}
-					let thereWasCollision = false;
-					tilesToUpdate.forEach(loopTile => {
-						if (loopTile) {
-							loopTile.glow.setTexture(glow.glowFill);
-							if (tools.currentTool.value == 'destroy') {
-								loopTile.glow.tint = 0xff5500;
-							} else if (tools.currentTool.value =='seed') {
-								loopTile.glow.tint = 0xffff00;
-							} else {
-								loopTile.glow.tint = 0xffffff;
-							}
-							loopTile.glow.visible = true;
-							if (!isTileClear(loopTile)) {
-								thereWasCollision = true;
-							}
-							glowTiles.push(loopTile);
-						}
-					});
-					if (thereWasCollision &&
-						(tools.currentTool.value == 'build' ||
-						tools.currentTool.value == 'plow')) {
-						glowTiles.forEach(tile => tile.glow.tint = 0xff0000);
-					}
-				}
-			}
-		});
-		this.renderTile.on('mousedown', () => {
-			lastClicked = {x: this.gridX / 32, y: this.gridY / 32};
-		});
-		this.renderTile.on('mouseout', () => {
-			glowTiles = [];
-			currentLevel.level.tiles.forEach(row => {
-				row.forEach(tile => {if (tile) tile.glow.visible = false;});
-			});
-			this.glow.visible = false;
-
-			let neighbors = this.getXNeighborSquare(4);
-			if (this.occupant) {
-				neighbors.push(this);	
-			}
-			neighbors.forEach(neighbor => {
-				if (neighbor && neighbor.occupant && neighbor.occupant.tall) {
-					neighbor.occupant.sprite.alpha = 1;
-				}
-			});
-
-		});
-		this.renderTile.on('click', () => {
-			glowTiles = [this];
-			handleTileActivation();
-			if (tools.currentTool.value == 'query') {
-				handleTileQuery(this);
-			}
-		});
-		this.renderTile.on('mouseup', () => {
-			handleTileActivation();
-		});
 		this.plowed = false;
 		this.seeded = config.plant ? true : false;
-		this.occupant = config.plant ? new Plant(this, config.plant) : null;
+		this.occupant = config.plant ? new Plant(config.plant) : null;
 	}
 
 	setPlowed(boolean) {

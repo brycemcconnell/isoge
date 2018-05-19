@@ -54,6 +54,11 @@ let crystalData = {
 }
 
 export let plot2x2;
+export let tree00;
+export let tree01;
+export let tree02;
+export let berryBush;
+export let bush;
 
 let textures = [];
 export function init() {
@@ -74,6 +79,12 @@ export function init() {
 	floorGrassDirt3 = new PIXI.Texture(PIXI.loader.resources["floor-grass-dirt3"].texture);
 	floorWood = new PIXI.Texture(PIXI.loader.resources["floor-wood"].texture);
 	plot2x2 = new PIXI.Texture(PIXI.loader.resources["plot2x2"].texture);
+
+	tree00 = new PIXI.Texture(PIXI.loader.resources["tree00"].texture);
+	tree01 = new PIXI.Texture(PIXI.loader.resources["tree01"].texture);
+	tree02 = new PIXI.Texture(PIXI.loader.resources["tree02"].texture);
+	berryBush = new PIXI.Texture(PIXI.loader.resources["berry-bush01"].texture);
+	bush = new PIXI.Texture(PIXI.loader.resources["bush01"].texture);
 
 	textures = [];
 	for (let i = 0; i < waterData.frames; i++) {
@@ -129,4 +140,6 @@ export function init() {
 		textures.push(texture);
 	}
 	crystal = textures;
+
+
 }

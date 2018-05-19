@@ -13,12 +13,11 @@ export class Plant_Config {
 		this.wilt = config.wilt
 		this.perish = config.perish
 		this.perishable  = config.perishable
-		this.texture = config.texture
+		this.textures = config.textures
 		this.visible = config.visible
 		this.tall = config.tall
 		this.yielder = config.yielder
 		this.animated = config.animated
-		this.animSprite = config.animSprite
-		this.frames = config.frames
+		// this.frames = config.frames // ?
 	}
 }

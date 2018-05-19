@@ -1,5 +1,6 @@
 import {Tile} from '../entities/Tile.js'
 import AnimatedTile from '../entities/AnimatedTile.js'
+import {Crystal} from '../entities/Crystal.js'
 import * as C from '../constants.js'
 import {bush} from '../plants/bush.js'
 import {fish} from '../plants/fish.js'
@@ -65,7 +66,8 @@ export default class Level {
 				this.tiles[i].push(testTile)
 				
 			})
-		})
+		});
+		
 
 		this.tiles.forEach(row => {
 			row.forEach(cell => {
@@ -101,7 +103,7 @@ export default class Level {
 				}
 			});
 		});
-		
+		this.generateCrystal();
 		this.updateCulling();
 		return true;
 	}
@@ -125,4 +127,19 @@ export default class Level {
 		})
 	}
 
+	generateCrystal() {
+		let candidates = [];
+		this.tiles.forEach((row, i) => {
+			row.forEach((cell, j) => {
+				if (cell) {
+					if (!cell.occupant && !cell.isWater) {
+						candidates.push(cell);
+					}
+				}
+			});
+		});
+		let chosenTile = candidates[C.random(candidates.length)];
+		chosenTile.occupant = new Crystal(chosenTile);
+		console.log(chosenTile)
+	}
 }

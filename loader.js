@@ -61,6 +61,7 @@ export function load() {
   .add("floor-grass-dirt2", "assets/floor-grass-dirt2.png")
   .add("floor-grass-dirt3", "assets/floor-grass-dirt3.png")
   .add("floor-wood", "assets/PlayerBuildings/wood.png")
+  .add("crystal", "assets/PlayerBuildings/crystal.json")
   .add("floor-stone", "assets/floor-stone.png")
   .add("elevated-floor-wood", "assets/elevated-floor-wood.png")
   .add("wall-x", "assets/wall-x.png")

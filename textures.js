@@ -47,6 +47,11 @@ let wheatData = {
 	frames: 12,
 	sprite: "wheat"
 }
+export let crystal;
+let crystalData = {
+	frames: 4,
+	sprite: "crystal"
+}
 
 let textures = [];
 export function init() {
@@ -114,4 +119,11 @@ export function init() {
 		textures.push(texture);
 	}
 	waterEdgeEast = textures;
+
+	textures = [];
+	for (let i = 0; i < crystalData.frames; i++) {
+		let texture = PIXI.Texture.fromFrame(crystalData.sprite + `${i < 9 ? 0 : ''}` + (i + 1) + '.png');
+		textures.push(texture);
+	}
+	crystal = textures;
 }

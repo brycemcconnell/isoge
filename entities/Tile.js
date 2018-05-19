@@ -81,6 +81,7 @@ export class Tile {
 		this.renderTile.position.set(this.isoX, this.isoY);
 		this.scene.addChild(this.renderTile);
 		this.renderTile.on('mouseover', () => {
+
 			this.glow.visible = true;
 
 			let neighbors = this.getXNeighborSquare(4);
@@ -92,10 +93,7 @@ export class Tile {
 
 			if (mouseDown) {
 				if (tools.currentTool.value !== 'move') {
-					glowTiles = [];
-					currentLevel.level.tiles.forEach(row => {
-						row.forEach(tile => {if (tile) tile.glow.visible = false;});
-					});
+					
 					let currentX = this.gridX / 32;
 					let currentY = this.gridY / 32;
 					let diffY = currentY - lastClicked.y;
@@ -153,6 +151,10 @@ export class Tile {
 			lastClicked = {x: this.gridX / 32, y: this.gridY / 32};
 		});
 		this.renderTile.on('mouseout', () => {
+			glowTiles = [];
+			currentLevel.level.tiles.forEach(row => {
+				row.forEach(tile => {if (tile) tile.glow.visible = false;});
+			});
 			this.glow.visible = false;
 
 			let neighbors = this.getXNeighborSquare(4);

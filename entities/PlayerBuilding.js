@@ -1,6 +1,6 @@
 import * as textures from '../textures.js';
 export class PlayerBuilding {
-	constructor(tile) {
+	constructor(tile, data) {
 		this.parent = tile;
 		this.pixiParent = tile.renderTile;
 		this.sprite = new PIXI.Sprite(textures.floorWood);

@@ -18,6 +18,11 @@ export const textStyles = {
 		fontFamily: 'PixelMPlus10',
 		fontSize: 20,
 		fill: 0x000000
+	}),
+	"Title" : new PIXI.TextStyle({
+		fontFamily: 'PixelMPlus10',
+		fontSize: '96px',
+		fill: 0xffffff
 	})
 };
 

@@ -1,6 +1,6 @@
 import {app} from './app.js'
-// import * as testLevel from './levels/testLevel.js'
-import * as circleLevel from './levels/circleLevel.js'
+import * as testLevel from './levels/testLevel.js'
+// import * as circleLevel from './levels/circleLevel.js'
 // import * as floatingIslands from './levels/floatingIslands.js'
 
 import * as C from './constants.js'
@@ -34,6 +34,7 @@ import * as Cloud from './entities/Cloud.js'
 import {Actor} from './entities/Actor.js';
 
 import * as TileUtils from './entities/Tile.js';
+import PopupText from './ui/components/PopupText.js';
 
 export let currentLevel;
 export let scene;
@@ -70,7 +71,7 @@ export default function setup() {
 
 		inventoryWindowInstance.init();
 		queryPanelInstance.init();
-		
+
 		layers.init();
 		glow.initGlowTextures();
 		TileUtils.initGlowContainer();
@@ -78,9 +79,9 @@ export default function setup() {
 		setTimeout(() => {document.getElementById('loader').classList.add('hidden')}, 1000);
 		
 
-		circleLevel.createLevel();
-		circleLevel.level.init();
-		currentLevel = circleLevel;
+		testLevel.createLevel();
+		testLevel.level.init();
+		currentLevel = testLevel;
 	
 
 		let axisX = new PIXI.Text('X Axis >', {fill: 0xffffff})
@@ -103,5 +104,7 @@ export default function setup() {
 
 		Cloud.createSomeClouds();
 		app.ticker.add(delta => game.loop(delta));
+
+		
 	})
 }

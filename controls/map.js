@@ -15,14 +15,14 @@ export function init() {
 	handleScenePan = (x, y) => {
 		sceneHolder.position.x += x
 		sceneHolder.position.y += y
-		currentLevel.level.updateCulling()
+		currentLevel.updateCulling()
 	}
 	window.resetView = () => {
 		sceneHolder.position.x = 0;
 		sceneHolder.position.y = 0;
 		sceneHolder.scale.x = 1;
 		sceneHolder.scale.y = 1;
-		currentLevel.level.updateCulling()
+		currentLevel.updateCulling()
 	}
 
 	window.addEventListener('mousedown', function(e) {
@@ -62,7 +62,7 @@ export function init() {
 			} else {
 				zoom(1, mousePos.x, mousePos.y)
 			}
-			currentLevel.level.updateCulling()
+			currentLevel.updateCulling()
 		}
 	})
 
@@ -83,9 +83,3 @@ function zoom(amnt, x, y) {
 	
 	
 }
-
-// export function handleScenePan(x, y) {
-// 	scene.position.x += x
-// 	scene.position.y += y
-// 	currentLevel.level.updateCulling()
-// }

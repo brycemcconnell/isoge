@@ -1,8 +1,8 @@
-import {Plant_Config} from './Plant_Config.js'
+import {Plant_Config} from './Plant_Config.js';
 import Yielder from '../entities/Yielder.js';
 import * as C from '../constants.js';
 import * as textures from '../textures.js';
-console.log(C);
+
 export function getRandom() {
 	return new Plant_Config({
 		grows: false,
@@ -12,5 +12,5 @@ export function getRandom() {
 		perishable: false,
 		tall: true,
 		yielder: [new Yielder({name: 'Wood', quantity: [10, 1]})]
-	})
+	});
 }

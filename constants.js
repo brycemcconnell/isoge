@@ -1,6 +1,5 @@
 export const CANVAS_SIZEX = 1400
 export const CANVAS_SIZEY = 800
-export const SCALE_FACTOR = 2
 
 export const random = (max, min) => {
 	if (min == undefined) min = 0;

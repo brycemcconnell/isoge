@@ -25,14 +25,37 @@ export function initGlowContainer() {
 }
 export class Tile {
 	constructor(config) {
-		this.scene = scene;
+		// x & y values returned from the creation loop
 		this.x = config.x || 0;
 		this.y = config.y || 0;
-		this.gridX = config.x * 32 || 0;
-		this.gridY = config.y * 32 || 0;
+
+		// cartesian values for creating (spacing) grid
+		this.cartX = config.x * 32 || 0;
+		this.cartY = config.y * 32 || 0;
+
+		// isometric values for placing in game world
+		this.isoX = this.cartX - this.cartY;
+		this.isoY = (this.cartX + this.cartY) / 2;
+
+		// Use this for placing children correctly on-
+		// different height tiles.
+		this.height = config.height || 0;
+
+		// A polygon to be passed to graphic obj,
+		// to draw the hit area (based on height of tile)
+		// Note: we are compensating for anchor points
+		// Thus the midpoint x is 0, and not 32.
+		this.hitArea = [
+			-32, -16, // left
+			  0,  -0, // top
+			 32, -16, //right
+			  0, -32 // bottom
+		// Note that 1 % 2 == 1 == true
+		].map((point, i) => i % 2 ? point - this.height : point);
+		// offset based on tile height
+
 		this.playerTile = false;
 		this.water = config.water || false;
-		this.popupText= null;
 		this.animated = config.animated || false;
 		this.animationSpeed = config.animationSpeed || .1;
 		this.tile = Array.isArray(config.tile) && !this.animated ? config.tile[C.random(config.tile.length - 1)] : config.tile;
@@ -43,8 +66,7 @@ export class Tile {
 		this.wall = config.wall || false;
 		this.textures = [];
 
-		this.isoX = this.gridX - this.gridY;
-		this.isoY = (this.gridX + this.gridY) / 2;
+		
 		
 		this.plowed = false;
 		this.seeded = config.plant ? true : false;
@@ -52,15 +74,15 @@ export class Tile {
 	}
 
 	setPlowed(boolean) {
-		this.plowed = boolean;
+		this.plowed = borolean;
 	}
 
 	getNeighbors() {
 		return [
-			currentLevel.level.getTile(this.x + 1, this.y),
-			currentLevel.level.getTile(this.x - 1, this.y),
-			currentLevel.level.getTile(this.x, this.y + 1),
-			currentLevel.level.getTile(this.x, this.y - 1),
+			currentLevel.getTile(this.x + 1, this.y),
+			currentLevel.getTile(this.x - 1, this.y),
+			currentLevel.getTile(this.x, this.y + 1),
+			currentLevel.getTile(this.x, this.y - 1),
 		];
 	}
 
@@ -70,12 +92,12 @@ export class Tile {
 		// Give x and y offsets for isometric visibility
 		const startX = checkX - num > 0 ? checkX - num : 0;
 		const startY = checkY - num > 0 ? checkY - num : 0;
-		const endX = checkX + num < currentLevel.level.tiles.length ? checkX + num : currentLevel.level.tiles.length;
-		const endY = checkY + num < currentLevel.level.tiles[0].length ? checkY + num : currentLevel.level.tiles[0].length;
+		const endX = checkX + num < currentLevel.tiles.length ? checkX + num : currentLevel.tiles.length;
+		const endY = checkY + num < currentLevel.tiles[0].length ? checkY + num : currentLevel.tiles[0].length;
 		const result = [];
 		for (let x = startX; x < endX; x++) {
 			for (let y = startY; y < endY; y++) {
-				result.push(currentLevel.level.getTile(x, y));
+				result.push(currentLevel.getTile(x, y));
 			}
 		}
 		return result;
@@ -89,9 +111,9 @@ function handleBuild(tile) {
 	}
 	tile.playerTile = true;
 	tile.renderTile.setTexture(textures.floorDirt);
-	let west = currentLevel.level.getTile(tile.x - 1, tile.y);
-	let north = currentLevel.level.getTile(tile.x, tile.y - 1);
-	let northWest = currentLevel.level.getTile(tile.x - 1, tile.y - 1);
+	let west = currentLevel.getTile(tile.x - 1, tile.y);
+	let north = currentLevel.getTile(tile.x, tile.y - 1);
+	let northWest = currentLevel.getTile(tile.x - 1, tile.y - 1);
 	[west, north, northWest].forEach(tile => {
 		tile.playerTile = true;
 		tile.renderTile.setTexture(textures.floorDirt);
@@ -133,6 +155,11 @@ function handleSeed(tile) {
 
 
 function handleHarvest(tile) {
+	/*
+	@Important - Change popuptext here to only show the total
+	amount received of each item, rather than x amount per tile
+	as it does now.
+	*/
 	if (tile.seeded && tile.occupant.maxStageReached) {
 		let yielder = tile.occupant.yielder;
 		let nothingFound = 0;
@@ -223,8 +250,8 @@ function handleTileActivation() {
 function handleTileQuery(tile) {
 	console.log(tile);
 	console.log(tile.x, tile.y, tile.type);
-	let east = currentLevel.level.getTile(tile.x + 1, tile.y);
-	let west = currentLevel.level.getTile(tile.x - 1, tile.y);
-	let south = currentLevel.level.getTile(tile.x, tile.y + 1);
-	let north = currentLevel.level.getTile(tile.x, tile.y - 1);
+	let east = currentLevel.getTile(tile.x + 1, tile.y);
+	let west = currentLevel.getTile(tile.x - 1, tile.y);
+	let south = currentLevel.getTile(tile.x, tile.y + 1);
+	let north = currentLevel.getTile(tile.x, tile.y - 1);
 }

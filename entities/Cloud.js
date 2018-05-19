@@ -1,6 +1,6 @@
 import {scene} from '../setup.js';
 import * as C from '../constants.js';
-import * as animationHandler from '../game/animationHandler.js'
+import * as eventUpdateHandler from '../game/eventUpdateHandler.js'
 
 export let clouds = [];
 
@@ -18,6 +18,7 @@ export class Cloud {
 		this.boundaryX = -scene.width/2;
 		this.startPos =(({width, height}) => ({width, height}))(scene);
 		this.setPosition();
+		this.handleUpdate = this.handleAnimation;
 	}
 
 	setPosition() {
@@ -35,9 +36,10 @@ export class Cloud {
 		if (!this.animationRunning) {
 			this.animationRunning = true;
 			this.sprite.visible = true;
-			animationHandler.add(this);
+			eventUpdateHandler.add(this);
 		}
 	}
+
 	handleAnimation() {
 		if (this.dir == 'out') {
 			this.counter += 1;
@@ -61,7 +63,7 @@ export class Cloud {
 		this.sprite.alpha = .8;
 		this.dir = 'out';
 		this.animationRunning = false;
-		animationHandler.remove(this);
+		eventUpdateHandler.remove(this);
 	}
 }
 

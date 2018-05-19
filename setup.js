@@ -1,38 +1,37 @@
-import {app} from './app.js'
-// import * as testLevel from './levels/testLevel.js'
-import * as circleLevel from './levels/circleLevel.js'
-// import * as floatingIslands from './levels/floatingIslands.js'
+import {app} from './app.js';
 
-import * as C from './constants.js'
-import * as toolsUI from './ui/tools.js'
-import * as buildUI from './ui/build.js'
-import * as destroyUI from './ui/destroy.js'
-import * as fpsUI from './ui/fps.js'
-import * as clockUI from './ui/clock.js'
-import * as moneyUI from './ui/money.js'
-import * as plantMenuUI from './ui/plantMenu.js'
-import * as ingameUI from './ui/ingame.js'
-import * as positionUI from './ui/position.js'
-import * as glow from './entities/glow.js' 
-import * as game from './game.js'
-import * as bush from './plants/bush.js'
-import * as pumpkin from './plants/pumpkin.js'
-import * as wheat from './plants/wheat.js'
-import * as defaultPlant from './plants/defaultPlant.js'
-import * as fish from './plants/fish.js'
-import * as berry_bush from './plants/berry_bush.js'
-import * as tree from './plants/tree.js'
-import * as inventoryWindowInstance from './ui/inventoryWindowInstance.js'
-import * as queryPanelInstance from './ui/queryPanelInstance.js'
+import * as level from './level/level.js';
+import * as maps from './maps/index.js';
+
+import * as C from './constants.js';
+import * as toolsUI from './ui/tools.js';
+import * as buildUI from './ui/build.js';
+import * as destroyUI from './ui/destroy.js';
+import * as fpsUI from './ui/fps.js';
+import * as clockUI from './ui/clock.js';
+import * as moneyUI from './ui/money.js';
+import * as plantMenuUI from './ui/plantMenu.js';
+import * as ingameUI from './ui/ingame.js';
+import * as positionUI from './ui/position.js';
+import * as glow from './entities/glow.js';
+import * as game from './game.js';
+import * as bush from './plants/bush.js';
+import * as pumpkin from './plants/pumpkin.js';
+import * as wheat from './plants/wheat.js';
+import * as defaultPlant from './plants/defaultPlant.js';
+import * as fish from './plants/fish.js';
+import * as berry_bush from './plants/berry_bush.js';
+import * as tree from './plants/tree.js';
+import * as inventoryWindowInstance from './ui/inventoryWindowInstance.js';
+import * as queryPanelInstance from './ui/queryPanelInstance.js';
 import * as textures from './textures.js';
-import * as map_controls from './controls/map.js'
-import * as sessionControls from './controls/sessionControls.js'
-import * as Cloud from './entities/Cloud.js'
+import * as map_controls from './controls/map.js';
+import * as sessionControls from './controls/sessionControls.js';
+import * as Cloud from './entities/Cloud.js';
 
 import {Actor} from './entities/Actor.js';
 
 import * as TileUtils from './entities/Tile.js';
-import PopupText from './ui/components/PopupText.js';
 
 export let currentLevel;
 export let scene;
@@ -49,16 +48,13 @@ export default function setup() {
 		defaultPlant.init();
 		fish.init();
 		berry_bush.init();
-		
+
 		sceneHolder = new PIXI.Container();
 		scene = new PIXI.Container();
 		sceneHolder.addChild(scene);
-// water
+
 		TileUtils.initGlowContainer();
-		app.stage.addChild(sceneHolder)
-		
-
-
+		app.stage.addChild(sceneHolder);
 		// let bob = new Actor();
 		
 
@@ -78,36 +74,22 @@ export default function setup() {
 		glow.initGlowTextures();
 		
 		
-		setTimeout(() => {document.getElementById('loader').classList.add('hidden')}, 1000);
 		
-
-		circleLevel.createLevel();
-		circleLevel.level.init();
-		circleLevel.level.render();
-		currentLevel = circleLevel;
-	
-
-		let axisX = new PIXI.Text('X Axis >', {fill: 0xffffff})
-		axisX.rotation = .6
-		axisX.position.y -= 100
-		scene.addChild(axisX)
-		let axisY = new PIXI.Text('Y Axis >', {fill: 0xffffff})
-		axisY.rotation = -.6
-		axisY.position.y -= 120
-		scene.addChild(axisY)
+		
+		// Generate the level from a map (returned from maps.level.create()),
+		// a 2d array also works fine here
+		currentLevel = level.createLevel(maps.squareLevel.create());
+		currentLevel.createTileData();
+		currentLevel.render();
+		
+		// Initialize panning and zooming on the map
 		map_controls.init();
+
+		// Create hotkeys etc by merging user prefs and defaults
 		sessionControls.init();
-		/*
-		// Maybe add a option in menu to play with filters
-		let colorMatrix = new PIXI.filters.TiltShiftFilter();
-		app.stage.children[12].filters = [colorMatrix] // land
-		
-		app.stage.children[11].filters = [colorMatrix] // water
-		*/
 
 		Cloud.createSomeClouds();
 		app.ticker.add(delta => game.loop(delta));
-
-		
-	})
+		setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1000);
+	});
 }

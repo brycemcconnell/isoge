@@ -33,7 +33,7 @@ export function handleTick() {
 	let skyV = 1;
 	// sky = ((dayMinutes / 1440) + .5);
 	// let skyV = sky > 1 ? 1 - (sky - 1) : sky;
-	currentLevel.level.tiles.forEach((row, i) => {
+	currentLevel.tileData.forEach((row, i) => {
 		row.forEach((cell, j) => {
 			if (cell) {
 				cell.renderTile.tint = `0x${PIXI.utils.rgb2hex([skyV, skyV, skyV]).toString(16)}`;

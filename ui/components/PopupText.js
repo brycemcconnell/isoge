@@ -1,5 +1,5 @@
 import * as C from '../../constants.js';
-import * as animationHandler from '../../game/animationHandler.js'
+import * as eventUpdateHandler from '../../game/eventUpdateHandler.js'
 export default class PopupText {
 	constructor(config = {}) {
 		this.style = config.style || C.textStyle;
@@ -18,7 +18,7 @@ export default class PopupText {
 		if (!this.animationRunning) {
 			this.animationRunning = true;
 			this.content.visible = true;
-			animationHandler.add(this);
+			eventUpdateHandler.add(this);
 		}
 	}
 
@@ -34,7 +34,7 @@ export default class PopupText {
 	}
 
 	destroyInstance() {
-		animationHandler.remove(this);
+		eventUpdateHandler.remove(this);
 		this.content.parent.removeChild(this.content);
 		this.content.destroy();
 		delete this;

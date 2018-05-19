@@ -18,7 +18,7 @@
 	font-family: "PixelMPlus10";
 	position: absolute;
 	color: #fff;
-	transition: opacity, visibility 1s;
+	transition: 1s;
 	position: absolute;
     left: 50%;
     top: 50%;

@@ -11,8 +11,8 @@ if(!PIXI.utils.isWebGLSupported()){
 PIXI.utils.sayHello(type)
 
 export let app = new PIXI.Application({ 
-    width: C.CANVAS_SIZEX * C.SCALE_FACTOR,         // default: 800
-    height: C.CANVAS_SIZEY * C.SCALE_FACTOR,        // default: 600
+    width: C.CANVAS_SIZEX,         // default: 800
+    height: C.CANVAS_SIZEY,        // default: 600
     antialias: false,    // default: false
     transparent: false, // default: false
     resolution: 1,      // default: 1

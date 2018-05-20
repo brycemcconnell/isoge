@@ -209,11 +209,14 @@ export default class Level {
 					// we will set culling on completion of render
 					renderCell.visible = false;
 				}
+				cell.graphicObject = renderCell;
+				renderCell.tileData = cell;
 				this.graphicObjects.push(renderCell);
 			})
 		})
 		// Finished rendering, now cull and set
 		// tiles in the viewport to visible
+		// console.log(this.tileData)
 		this.updateCulling();
 	}
 }

@@ -81,10 +81,10 @@ export class Tile {
 
 	getNeighbors() {
 		return [
-			currentLevel.getTile(this.x + 1, this.y),
-			currentLevel.getTile(this.x - 1, this.y),
-			currentLevel.getTile(this.x, this.y + 1),
-			currentLevel.getTile(this.x, this.y - 1),
+			currentLevel.getTileData(this.x + 1, this.y),
+			currentLevel.getTileData(this.x - 1, this.y),
+			currentLevel.getTileData(this.x, this.y + 1),
+			currentLevel.getTileData(this.x, this.y - 1),
 		];
 	}
 
@@ -99,7 +99,7 @@ export class Tile {
 		const result = [];
 		for (let x = startX; x < endX; x++) {
 			for (let y = startY; y < endY; y++) {
-				result.push(currentLevel.getTile(x, y));
+				result.push(currentLevel.getTileData(x, y));
 			}
 		}
 		return result;
@@ -113,9 +113,9 @@ function handleBuild(tile) {
 	}
 	tile.playerTile = true;
 	tile.renderTile.setTexture(textures.floorDirt);
-	let west = currentLevel.getTile(tile.x - 1, tile.y);
-	let north = currentLevel.getTile(tile.x, tile.y - 1);
-	let northWest = currentLevel.getTile(tile.x - 1, tile.y - 1);
+	let west = currentLevel.getTileData(tile.x - 1, tile.y);
+	let north = currentLevel.getTileData(tile.x, tile.y - 1);
+	let northWest = currentLevel.getTileData(tile.x - 1, tile.y - 1);
 	[west, north, northWest].forEach(tile => {
 		tile.playerTile = true;
 		tile.renderTile.setTexture(textures.floorDirt);
@@ -252,8 +252,8 @@ function handleTileActivation() {
 function handleTileQuery(tile) {
 	console.log(tile);
 	console.log(tile.x, tile.y, tile.type);
-	let east = currentLevel.getTile(tile.x + 1, tile.y);
-	let west = currentLevel.getTile(tile.x - 1, tile.y);
-	let south = currentLevel.getTile(tile.x, tile.y + 1);
-	let north = currentLevel.getTile(tile.x, tile.y - 1);
+	let east = currentLevel.getTileData(tile.x + 1, tile.y);
+	let west = currentLevel.getTileData(tile.x - 1, tile.y);
+	let south = currentLevel.getTileData(tile.x, tile.y + 1);
+	let north = currentLevel.getTileData(tile.x, tile.y - 1);
 }

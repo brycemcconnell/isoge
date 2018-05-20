@@ -1,32 +1,22 @@
 import * as map from '../controls/map.js'
-let maxSpeed = 10;
-let wSpeed = 0;
-let aSpeed = 0;
-let sSpeed = 0;
-let dSpeed = 0;
+let maxSpeed = 12;
+let vSpeed = 0;
+let hSpeed = 0;
 export function handlePanning() {
-	if (map.keys.w) {
-		wSpeed = Math.min(wSpeed + 1, maxSpeed);
+	if (map.keys.w || map.keys.s) {
+		if (map.keys.w)	vSpeed = Math.min(vSpeed + 1, maxSpeed);
+		if (map.keys.s)	vSpeed = Math.max(vSpeed - 1, -maxSpeed);
 	} else {
-		wSpeed = Math.max(wSpeed - 1, 0)
+		if (vSpeed > 0) vSpeed = Math.max(vSpeed - 1, 0)
+		if (vSpeed < 0) vSpeed = Math.min(vSpeed + 1, 0)
 	}
-	if (map.keys.a) {
-		aSpeed = Math.min(aSpeed + 1, maxSpeed);
+	if (map.keys.a || map.keys.d) {
+		if (map.keys.a)	hSpeed = Math.min(hSpeed + 1, maxSpeed);
+		if (map.keys.d)	hSpeed = Math.max(hSpeed - 1, -maxSpeed);
 	} else {
-		aSpeed = Math.max(aSpeed - 1, 0)
+		if (hSpeed > 0) hSpeed = Math.max(hSpeed - 1, 0)
+		if (hSpeed < 0) hSpeed = Math.min(hSpeed + 1, 0)
 	}
-	if (map.keys.s) {
-		sSpeed = Math.min(sSpeed + 1, maxSpeed);
-	} else {
-		sSpeed = Math.max(sSpeed - 1, 0)
-	}
-	if (map.keys.d) {
-		dSpeed = Math.min(dSpeed + 1, maxSpeed);
-	} else {
-		dSpeed = Math.max(dSpeed - 1, 0)
-	}
-	wSpeed != 0 && map.handleScenePan(0, wSpeed)
-	aSpeed != 0 && map.handleScenePan(aSpeed, 0)
-	sSpeed != 0 && map.handleScenePan(0, -sSpeed)
-	dSpeed != 0 && map.handleScenePan(-dSpeed, 0)
+
+	if (vSpeed != 0 || hSpeed != 0) map.handleScenePan(hSpeed, vSpeed);
 }

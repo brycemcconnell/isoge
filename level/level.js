@@ -7,7 +7,7 @@ import {fish} from '../plants/fish.js'
 import {berry_bush} from '../plants/berry_bush.js'
 import * as tree from '../plants/tree.js'
 import * as textures from '../textures.js';
-import {scene} from '../setup.js';
+import {scene, bob} from '../setup.js';
 import * as eventUpdateHandler from '../game/eventUpdateHandler.js';
 export default class Level {
 	constructor(mapData) {
@@ -38,11 +38,13 @@ export default class Level {
 					let isWater = Object.keys(this.tileset)[cell] == 'water' ? true : false;
 					// let isWater = true;
 					let plantType;
+					let solid = isWater ? true : false;
 					if (!isWater) {
 						var value = noise.simplex2(i / 40, j / 40);
 						if (value > Math.random()) {
 							let newTree = tree.getRandom()
 							plantType = newTree;
+							solid = true;
 						}
 						if (cell == 2 && C.random(10) > 9) {
 							let result = C.random(1)
@@ -58,7 +60,8 @@ export default class Level {
 							water: false,
 							plant: plantType,
 							type: Object.keys(this.tileset)[cell],
-							height: 6
+							height: 6,
+							solid: solid
 						});
 						let colV = Math.max(0.7, Math.random());
 						if (Math.random() > .5 && testTile.plant) testTile.plant.sprite.tint =`0x${PIXI.utils.rgb2hex([colV, colV, colV]).toString(16)}`
@@ -75,7 +78,8 @@ export default class Level {
 							plant: plantType,
 							animated: true,
 							animationSpeed: .1,
-							type: "water"
+							type: "water",
+							solid: solid
 						});
 					}
 				}
@@ -85,8 +89,12 @@ export default class Level {
 		return true;
 	}
 
-	getTile(x, y) {
-		if (this.tileData[y]) return this.tileData[y][x]
+	getTileData(x, y) {
+		if (this.tileData[x]) return this.tileData[x][y]
+	}
+	getGraphicObject(x, y) {
+		let index = x * this.tileData[x].length + y;
+		if (this.graphicObjects[index]) return this.graphicObjects[index]
 	}
 
 	updateCulling() {
@@ -192,6 +200,11 @@ export default class Level {
 					renderCell.interactive = true;
 					renderCell.on('mouseover', () => renderCell.tint = 0xff5555);
 					renderCell.on('mouseout', () => renderCell.tint = 0xffffff);
+					renderCell.on('click', () => {
+						// bob.changeTile(renderCell, cell)
+						bob.moveTo(cell);
+						// console.log(bob)
+					})
 					// set all cells on creation to invisible,
 					// we will set culling on completion of render
 					renderCell.visible = false;

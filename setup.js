@@ -36,6 +36,7 @@ import * as TileUtils from './entities/Tile.js';
 export let currentLevel;
 export let scene;
 export let sceneHolder;
+export let bob;
 export default function setup() {
 	document.getElementById('loaderInfo').innerHTML = 'Generating level';
 	document.fonts.load('10px "PixelMPlus10"').then(() => {
@@ -55,7 +56,7 @@ export default function setup() {
 
 		TileUtils.initGlowContainer();
 		app.stage.addChild(sceneHolder);
-		// let bob = new Actor();
+		
 		
 
 		toolsUI.init();
@@ -81,7 +82,7 @@ export default function setup() {
 		currentLevel = level.createLevel(maps.squareLevel.create());
 		currentLevel.createTileData();
 		currentLevel.render();
-		
+		bob = new Actor();
 		// Initialize panning and zooming on the map
 		map_controls.init();
 

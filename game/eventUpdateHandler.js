@@ -15,3 +15,10 @@ export function add(item) {
 export function remove(item) {
 	handleList.splice(handleList.indexOf(item), 1);
 }
+
+export function isPresent(item) {
+	if (handleList.includes(item)) {
+		return true;
+	}
+	return false;
+}

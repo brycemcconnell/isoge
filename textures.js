@@ -22,6 +22,7 @@ export let tree01;
 export let tree02;
 export let berryBush;
 export let bush;
+export let pirate;
 
 export function init() {
 	function createTextureFrames(sprite, frames) {
@@ -57,4 +58,5 @@ export function init() {
 	tree02 = new PIXI.Texture(PIXI.loader.resources["tree02"].texture);
 	berryBush = new PIXI.Texture(PIXI.loader.resources["berry-bush01"].texture);
 	bush = new PIXI.Texture(PIXI.loader.resources["bush01"].texture);
+	pirate = new PIXI.Texture(PIXI.loader.resources["pirate"].texture);
 }

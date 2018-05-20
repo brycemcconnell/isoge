@@ -65,6 +65,8 @@ export class Tile {
 		this.renderTile;
 		this.wall = config.wall || false;
 		this.textures = [];
+		// For astar
+		this.solid = config.solid || false;
 
 		
 		
@@ -74,7 +76,7 @@ export class Tile {
 	}
 
 	setPlowed(boolean) {
-		this.plowed = borolean;
+		this.plowed = boolean;
 	}
 
 	getNeighbors() {

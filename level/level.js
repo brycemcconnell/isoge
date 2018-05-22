@@ -7,8 +7,14 @@ import {fish} from '../plants/fish.js'
 import {berry_bush} from '../plants/berry_bush.js'
 import * as tree from '../plants/tree.js'
 import * as textures from '../textures.js';
-import {scene, bob} from '../setup.js';
+import {scene, sceneHolder} from '../setup.js';
 import * as eventUpdateHandler from '../game/eventUpdateHandler.js';
+import {getActorFromTile, getAllActorFromTile, selectedActors, allActors} from '../entities/Actor.js';
+import {mouseDown} from '../controls/map.js';
+import {currentTool} from '../controls/tools.js';
+
+let lastClicked;
+
 export default class Level {
 	constructor(mapData) {
 		this.grid = mapData
@@ -114,26 +120,9 @@ export default class Level {
 		})
 	}
 
-	/*
-	generateCrystal() {
-		let candidates = [];
-		this.tiles.forEach((row, i) => {
-			row.forEach((cell, j) => {
-				if (cell) {
-					if (!cell.occupant && !cell.isWater) {
-						candidates.push(cell);
-					}
-				}
-			});
-		});
-		let chosenTile = candidates[C.random(candidates.length)];
-		chosenTile.occupant = new Crystal(chosenTile);
-		console.log(chosenTile)
-	}
-	*/
-
-	render() {
-
+	render() {	
+		let selectedTiles = [];
+		let glowContainer = new PIXI.Container();
 		this.tileData.forEach(row => {
 			row.forEach(cell => {
 				let renderCell;
@@ -142,9 +131,6 @@ export default class Level {
 						renderCell = new PIXI.Sprite(cell.tile);
 						renderCell.position.set(cell.isoX, cell.isoY)
 						renderCell.anchor.set(.5, 1);
-						if (Math.random() > .5) {
-							renderCell.scale.set(-1, 1);
-						}
 						scene.addChild(renderCell)
 						if (cell.occupant) {
 							let occupant = new PIXI.Sprite(cell.occupant.textures);
@@ -195,15 +181,65 @@ export default class Level {
 
 					// Apply the hitArea defined in the tileData
 					renderCell.hitArea = new PIXI.Polygon(cell.hitArea);
+
+					let glow = new PIXI.Sprite(textures.glow);
+					glow.visible = false;
+					glowContainer.addChild(glow);
+					glow.position.x = renderCell.position.x;
+					glow.position.y = renderCell.position.y-cell.height;
+					glow.anchor.set(0.5, 1);
+					cell.glow = glow;
 					// Supposed performance boost.
 					renderCell.interactiveChildren = false;
 					renderCell.interactive = true;
-					renderCell.on('mouseover', () => renderCell.tint = 0xff5555);
-					renderCell.on('mouseout', () => renderCell.tint = 0xffffff);
+					renderCell.on('mouseover', () => {
+						renderCell.tint = 0xff5555
+						if (mouseDown && currentTool.value !== 'move') {
+							let currentX = cell.x
+							let currentY = cell.y
+							let diffX = cell.x - lastClicked.x
+							let diffY = cell.y - lastClicked.y
+							let signX = Math.sign(diffX);
+							let signY = Math.sign(diffY);
+							let tilesToUpdate = [];
+							for (let i = 0; i <= Math.abs(diffY); i++) {
+								for (let j = 0; j <= Math.abs(diffX); j++) {
+									let loopTile = this.tileData[signY * i + lastClicked.y][signX * j + lastClicked.x];
+									tilesToUpdate.push(loopTile);
+								}
+							}
+							tilesToUpdate.forEach(loopTile => {
+								if (loopTile) {
+									loopTile.glow.visible = true;
+									selectedTiles.push(loopTile);
+								}
+							});
+						}
+					});
+					renderCell.on('mouseup', () => {
+						handleTileActivation(selectedTiles);
+						selectedTiles.forEach(tile => tile.glow.visible = false);
+						selectedTiles = [];
+						lastClicked = cell;
+					});
+					renderCell.on('mousedown', () => {
+						lastClicked = cell;
+					});
+					renderCell.on('mouseout', () => {
+						renderCell.tint = 0xffffff
+						
+					});
 					renderCell.on('click', () => {
-						// bob.changeTile(renderCell, cell)
-						bob.moveTo(cell);
-						// console.log(bob)
+						allActors.forEach(actor => actor.deselect());
+						getActorFromTile(cell);
+						lastClicked = cell;
+					})
+					renderCell.on('rightclick', () => {
+						selectedTiles.forEach(tile => tile.glow.visible = false);
+						selectedTiles = [];
+						selectedActors().forEach(actor => {
+							actor.moveTo(cell);
+						})
 					})
 					// set all cells on creation to invisible,
 					// we will set culling on completion of render
@@ -217,6 +253,7 @@ export default class Level {
 		// Finished rendering, now cull and set
 		// tiles in the viewport to visible
 		// console.log(this.tileData)
+		scene.addChild(glowContainer);
 		this.updateCulling();
 	}
 }
@@ -252,4 +289,11 @@ function handleEdges(tiles, cell, pixiObj) {
 
 export function createLevel(mapData) {
 	return new Level(mapData);
+}
+
+
+function handleTileActivation(tiles) {
+	if (currentTool.value == 'actor') {
+		tiles.forEach(tile => getAllActorFromTile(tile));
+	}
 }

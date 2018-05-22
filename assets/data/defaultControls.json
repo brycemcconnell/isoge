@@ -1,4 +1,11 @@
 {
 	"inventory" : "e",
-	"move" : 1
+	"move" :    1,
+	"actor" :   2,
+	"build" :   3,
+	"plow" :    4,
+	"seed" :    5,
+	"harvest" : 6,
+	"destroy" : 7,
+	"query" :   8
 }

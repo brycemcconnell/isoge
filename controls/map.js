@@ -3,6 +3,7 @@ import {sceneHolder, currentLevel} from '../setup.js'
 import * as C from '../constants.js'
 import * as tools from './tools.js'
 export let mouseDown = false;
+export let mousePos;
 export let keys = {
 	w: false,
 	a: false,
@@ -10,7 +11,7 @@ export let keys = {
 	d: false
 }
 export let handleScenePan = function() {};
-export let scrollEnabled = false;
+export let scrollEnabled = true;
 export function init() {
 	handleScenePan = (x, y) => {
 		sceneHolder.position.x += x
@@ -36,8 +37,7 @@ export function init() {
 	
 
 	window.addEventListener('mousemove', function(e) {
-		let mousePos = app.renderer.plugins.interaction.mouse.global
-		// console.log(mousePos)
+		mousePos = app.renderer.plugins.interaction.mouse.global
 		if (mouseDown == true && tools.currentTool.value == 'move') {
 			handleScenePan(Math.round(e.movementX / 2), Math.round(e.movementY / 2));
 		}
@@ -58,9 +58,9 @@ export function init() {
 		let mousePos = app.renderer.plugins.interaction.mouse.global
 		if (scrollEnabled) {
 			if (e.deltaY > 0) {
-				zoom(-1, mousePos.x, mousePos.y)
+				zoom(-.1, mousePos.x, mousePos.y)
 			} else {
-				zoom(1, mousePos.x, mousePos.y)
+				zoom(.1, mousePos.x, mousePos.y)
 			}
 			currentLevel.updateCulling()
 		}
@@ -76,7 +76,6 @@ function zoom(amnt, x, y) {
 	// @Important, this zoom is broken
 	sceneHolder.scale.x += amnt;
 	sceneHolder.scale.y += amnt;
-	console.log(Math.sign(amnt))
 	if (Math.sign(amnt) == 1) {
 
 	}

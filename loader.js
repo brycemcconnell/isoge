@@ -8,6 +8,10 @@ export function load() {
   .add("bg-grass", "assets/bg-grass.png")
 
   .add("pirate", "assets/actors/pirate.png")
+  .add("ness", "assets/actors/ness.json")
+  .add("paula", "assets/actors/paula.json")
+  .add("jeff", "assets/actors/jeff.json")
+  .add("tracy", "assets/actors/tracy.json")
 
   .add("ui-move", "assets/ui-move.png")
   .add("ui-move-active", "assets/ui-move-active.png")

@@ -2,9 +2,9 @@ import {app} from '../app.js'
 import * as C from '../constants.js'
 import Button from './Button.js'
 import * as tools from '../controls/tools.js'
-import * as hotkeys from '../controls/hotkeys.js'
 import * as settings from './settings.js'
 import * as queryPanelInstance from './queryPanelInstance.js'
+import {sessionControls} from '../controls/sessionControls.js'
 export let uiContainer;
 export let uiGroup = {};
 
@@ -23,7 +23,8 @@ export function init() {
 		seed,
 		harvest,
 		destroy,
-		query;
+		query,
+		actor;
 	
 	uiGroup["move"] = new Button({
 		buttonName: "move",
@@ -32,7 +33,15 @@ export function init() {
 		handleClick: function() {
 			tools.setTool({value: 'move'});
 		},
-		hotkey: hotkeys.tools.move
+		hotkey: sessionControls["move"]
+	})
+
+	uiGroup["actor"] = new Button({
+		buttonName: "actor",
+		handleClick: function() {
+			tools.setTool({value: 'actor'});
+		},
+		hotkey: sessionControls["actor"]
 	})
 	
 	uiGroup["build"] = new Button({
@@ -42,7 +51,7 @@ export function init() {
 		handleClick: function() {
 			tools.setTool({value: 'build', tile: lastBuilt});
 		},
-		hotkey: hotkeys.tools.build
+		hotkey: sessionControls["build"]
 	})
 	uiGroup["plow"] = new Button({
 		buttonName: "plow",
@@ -51,7 +60,7 @@ export function init() {
 		handleClick: function() {
 			tools.setTool({value: 'plow', tile: 'floor-plowed', mode: 'area'});
 		},
-		hotkey: hotkeys.tools.plow
+		hotkey: sessionControls["plow"]
 	})
 	uiGroup["seed"] = new Button({
 		buttonName: "seed",
@@ -60,7 +69,7 @@ export function init() {
 		handleClick: function() {
 			tools.setTool({value: 'seed'});
 		},
-		hotkey: hotkeys.tools.seed
+		hotkey: sessionControls["seed"]
 	})
 	uiGroup["harvest"] = new Button({
 		buttonName: "harvest",
@@ -69,7 +78,7 @@ export function init() {
 		handleClick: function() {
 			tools.setTool({value: 'harvest'});
 		},
-		hotkey: hotkeys.tools.harvest
+		hotkey: sessionControls["harvest"]
 	})
 	uiGroup["destroy"] = new Button({
 		buttonName: "destroy",
@@ -78,7 +87,7 @@ export function init() {
 		handleClick: function() {
 			tools.setTool({value: 'destroy', mode: 'area'});
 		},
-		hotkey: hotkeys.tools.destroy
+		hotkey: sessionControls["destroy"]
 	})
 	uiGroup["query"] = new Button({
 		buttonName: "query",
@@ -88,6 +97,7 @@ export function init() {
 			tools.setTool({value: 'query', mode: 'single'});
 			queryPanelInstance.handleToggle();
 		},
+		hotkey: sessionControls["query"]
 	})
 	
 	Object.entries(uiGroup).forEach((child, index) => {

@@ -23,6 +23,11 @@ export let tree02;
 export let berryBush;
 export let bush;
 export let pirate;
+export let ness;
+export let paula;
+export let jeff;
+export let tracy;
+export let glow;
 
 export function init() {
 	function createTextureFrames(sprite, frames) {
@@ -34,6 +39,27 @@ export function init() {
 		return textures;
 	}
 
+	function createWalker(sprite) {
+		// Creates 8 sets of 4 frame animations
+		let set = []; // Hold each animation
+		let currentAnimation = [];
+		// 8 sets of 4, thus 32 frames
+		for (let i = 0; i < 32; i++) {
+			let texture = PIXI.Texture.fromFrame(sprite + `${i < 9 ? 0 : ''}` + (i + 1) + '.png');
+			currentAnimation.push(texture);
+			if ((i + 1) % 4 == 0) {
+				set.push(currentAnimation);
+				currentAnimation = [];
+			}
+		}
+		return set;
+	}
+	ness = createWalker('ness');
+	paula = createWalker('paula');
+	jeff = createWalker('jeff');
+	tracy = createWalker('tracy');
+
+	glow = new PIXI.Texture(PIXI.loader.resources["glow-white-fill"].texture);
 	fish = createTextureFrames("fish", 12);
 	water = createTextureFrames("floor-water", 4);
 	waterEdgeSouth = createTextureFrames("water-edge-south", 4);

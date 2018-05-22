@@ -36,13 +36,16 @@ import * as TileUtils from './entities/Tile.js';
 export let currentLevel;
 export let scene;
 export let sceneHolder;
-export let bob;
 export default function setup() {
 	document.getElementById('loaderInfo').innerHTML = 'Generating level';
 	document.fonts.load('10px "PixelMPlus10"').then(() => {
+		// Create hotkeys etc by merging user prefs and defaults
+		sessionControls.init();
 
 		textures.init();
-
+		app.renderer.view.addEventListener('contextmenu', (e) => {
+			e.preventDefault();
+		});
 		bush.init();
 		pumpkin.init();
 		wheat.init();
@@ -82,12 +85,14 @@ export default function setup() {
 		currentLevel = level.createLevel(maps.squareLevel.create());
 		currentLevel.createTileData();
 		currentLevel.render();
-		bob = new Actor();
+		let ness = new Actor({char:"ness"});
+		let paula = new Actor({char:"paula"});
+		let jeff = new Actor({char:"jeff"});
+		let tracy = new Actor({char:"tracy"});
 		// Initialize panning and zooming on the map
 		map_controls.init();
 
-		// Create hotkeys etc by merging user prefs and defaults
-		sessionControls.init();
+		
 
 		Cloud.createSomeClouds();
 		app.ticker.add(delta => game.loop(delta));

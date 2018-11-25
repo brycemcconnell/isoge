@@ -47,11 +47,13 @@ export default class Level {
 					let solid = isWater ? true : false;
 					if (!isWater) {
 						var value = noise.simplex2(i / 40, j / 40);
+						
 						if (value > Math.random()) {
 							let newTree = tree.getRandom()
 							plantType = newTree;
 							solid = true;
 						}
+						
 						if (cell == 2 && C.random(10) > 9) {
 							let result = C.random(1)
 							plantType = result == 0 ? bush :
@@ -194,7 +196,7 @@ export default class Level {
 					renderCell.interactive = true;
 					renderCell.on('mouseover', () => {
 						renderCell.tint = 0xff5555
-						if (mouseDown && currentTool.value !== 'move') {
+						if (mouseDown && !(currentTool.value == 'move' || currentTool.value == 'query')) {
 							let currentX = cell.x
 							let currentY = cell.y
 							let diffX = cell.x - lastClicked.x

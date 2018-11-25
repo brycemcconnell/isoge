@@ -85,6 +85,7 @@ export default function setup() {
 		currentLevel = level.createLevel(maps.squareLevel.create());
 		currentLevel.createTileData();
 		currentLevel.render();
+		console.log(scene)
 		let ness = new Actor({char:"ness"});
 		let paula = new Actor({char:"paula"});
 		let jeff = new Actor({char:"jeff"});

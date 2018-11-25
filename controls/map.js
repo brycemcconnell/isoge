@@ -2,6 +2,7 @@ import {app} from '../app.js'
 import {sceneHolder, currentLevel} from '../setup.js'
 import * as C from '../constants.js'
 import * as tools from './tools.js'
+import {sessionControls} from './sessionControls.js';
 export let mouseDown = false;
 export let mousePos;
 export let keys = {
@@ -11,8 +12,9 @@ export let keys = {
 	d: false
 }
 export let handleScenePan = function() {};
-export let scrollEnabled = true;
+export let scrollEnabled;
 export function init() {
+	scrollEnabled = sessionControls.scrollZoomEnabled;
 	handleScenePan = (x, y) => {
 		sceneHolder.position.x += x
 		sceneHolder.position.y += y

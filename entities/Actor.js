@@ -35,7 +35,8 @@ export class Actor {
 		this.currentTile = currentLevel.getTileData(0, 0);
 		this.currentTile.graphicObject.addChild(this.sprite);
 		this.counter = 0;
-		this.maxCount = 30;
+		this.maxDefaultCount = 15;
+		this.maxCount = this.maxDefaultCount;
 
 		this.currentDirection = "south";
 		this.vel = {
@@ -62,8 +63,7 @@ export class Actor {
 		
 		// set new direction
 
-		this.sprite.textures = this.walkerSet[this.direction];
-		this.sprite.gotoAndPlay(0);
+		
 	}
 
 	moveTo(newTileData) {
@@ -86,10 +86,17 @@ export class Actor {
 			
 			this.moving = true;		
 			this.direction = getDirection(this.path[0].x - this.currentTile.x, this.path[0].y - this.currentTile.y);
+			this.maxCount = this.maxDefaultCount;
+
 			this.sprite.textures = this.walkerSet[this.direction];
 			this.sprite.gotoAndPlay(0);
 			this.vel.x = this.path[0].x - this.currentTile.x
 			this.vel.y = this.path[0].y - this.currentTile.y
+			if ([1, 3, 5, 7].includes(this.direction)) {
+				this.maxCount = this.maxDefaultCount * 1.5;
+				this.vel.x *= .66;
+				this.vel.y *= .66;
+			}
 		}
 		
 	}
@@ -107,8 +114,8 @@ export class Actor {
 
 	handleUpdate() {
 		this.counter += 1;
-		this.sprite.position.x = this.sprite.position.x + toIsoX(this.vel.x, this.vel.y);
-		this.sprite.position.y = this.sprite.position.y + toIsoY(this.vel.x, this.vel.y);
+		// this.sprite.position.x = this.sprite.position.x + toIsoX(this.vel.x, this.vel.y);
+		// this.sprite.position.y = this.sprite.position.y + toIsoY(this.vel.x, this.vel.y);
 		if (this.counter > this.maxCount ) {
 			this.counter = 0;
 			let tileData = currentLevel.getTileData(this.path[0].y, this.path[0].x);
@@ -116,18 +123,26 @@ export class Actor {
 			if (tileData == this.destination) {
 				eventUpdateHandler.remove(this);
 				this.path = [];
-				this.sprite.gotoAndStop(121);
-				let currentTileActors = allActors.filter(actor => actor.currentTile == this.currentTile && actor != this).length;
-				if (currentTileActors == 0) { this.offset = {x:0, y: 0};}
-				if (currentTileActors == 1) { this.offset = {x:16, y: 8};}
-				if (currentTileActors == 2) { this.offset = {x:-16, y:8};}
-				if (currentTileActors == 3) { this.offset = {x:0, y: 16};}
+				this.sprite.gotoAndStop(1);
+				// let currentTileActors = allActors.filter(actor => actor.currentTile == this.currentTile && actor != this).length;
+				// if (currentTileActors == 0) { this.offset = {x:0, y: 0};}
+				// if (currentTileActors == 1) { this.offset = {x:16, y: 8};}
+				// if (currentTileActors == 2) { this.offset = {x:-16, y:8};}
+				// if (currentTileActors == 3) { this.offset = {x:0, y: 16};}
 			} else {
 				this.path.shift();
 				if (this.path[0]) {
 					this.direction = getDirection(this.path[0].x - this.currentTile.x, this.path[0].y - this.currentTile.y);
+					this.maxCount = this.maxDefaultCount;
 					this.vel.x = this.path[0].x - this.currentTile.x
 					this.vel.y = this.path[0].y - this.currentTile.y
+					if ([1, 3, 5, 7].includes(this.direction)) {
+						this.maxCount = this.maxDefaultCount * 1.5;
+						this.vel.x *= .66;
+						this.vel.y *= .66;
+					}
+					this.sprite.textures = this.walkerSet[this.direction];
+					this.sprite.gotoAndPlay(0);
 				}
 			}
 		}

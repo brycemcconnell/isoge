@@ -1,3 +1,4 @@
 {
-	"inventory" : "i"
+	"inventory" : "i",
+	"scrollZoomEnabled": true
 }

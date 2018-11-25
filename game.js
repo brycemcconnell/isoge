@@ -7,7 +7,6 @@ import * as positionUI from './ui/position.js'
 export function loop() {
  	time.handleTime();
  	keyboard_panning.handlePanning();
- 	Actor.allActors.forEach(actor => actor.update());
  	eventUpdateHandler.run();
  	clouds.forEach(cloud => cloud.update());
  	positionUI.update();
